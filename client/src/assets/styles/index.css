@@ -1,8 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-color: #525561;
+  padding: 0 40px;
+}
 .custom_wave {
   overflow: hidden;
   position: relative;
-  height: 500px;
-  width: 500px;
+  height: 384px;
+  width: 300px;
 }
 .custom_wave::before {
   content: "";
