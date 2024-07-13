@@ -4,7 +4,7 @@ const LineSvg = ({className}) => {
   return (
 <svg
   id="visual"
-  viewBox="0 0 400 600" 
+  viewBox="170 0 100 600" 
   xmlns="http://www.w3.org/2000/svg"
   xmlnsXlink="http://www.w3.org/1999/xlink"
   version="1.1"
