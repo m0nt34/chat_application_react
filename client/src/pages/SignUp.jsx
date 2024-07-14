@@ -15,18 +15,21 @@ const SignUp = () => {
         }}
       >
         <div className="relative max-w-5xl w-full bg-custom-gradient p-10">
-          <div className="flex flex-col w-[53%] h-full gap-24 z-10">
+          <div className="flex flex-col w-[53%] h-full gap-20 z-10">
             <header className="flex items-center justify-center gap-4 w-fit text-white font-bold select-none text-4xl ">
               <span className="w-8 h-8 rounded-full bg-customColor-blue"></span>
               Chat app
             </header>
             <div className="flex flex-col gap-6 select-none">
-              <span className="text-gray-400 font-bold">
-                START FOR FREE
-              </span>
-              <h1 className="flex items-end  text-white text-5xl font-bold gap-1">
-                Create new account
-                <span className="h-2 w-2 rounded-full bg-customColor-blue mb-1"></span>
+              <span className="text-gray-400 font-bold">START FOR FREE</span>
+              <h1 className="flex flex-wrap items-end  text-white text-5xl font-bold gap-1 leading-10">
+                <span className="mr-2"> Create </span>{" "}
+                <span className="mr-2"> new</span>
+                <span className="flex items-end">
+                  {" "}
+                  account
+                  <span className="h-2 w-2 rounded-full bg-customColor-blue ml-1"></span>
+                </span>
               </h1>
               <p className="text-gray-400 font-bold">
                 Already have an account?{" "}
@@ -40,7 +43,11 @@ const SignUp = () => {
               <Form />
             </div>
           </div>
-          <LineSvg className={"absolute left-[525px] top-0 h-full w-fit pointer-events-none"} />
+          <LineSvg
+            className={
+              "absolute left-[54%] top-0 h-full w-fit pointer-events-none"
+            }
+          />
         </div>
       </div>
     </div>

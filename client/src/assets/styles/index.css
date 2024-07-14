@@ -11,6 +11,7 @@ body{
   position: relative;
   height: 384px;
   width: 300px;
+
 }
 .custom_wave::before {
   content: "";
