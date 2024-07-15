@@ -1,10 +1,9 @@
-import React,{useState}from "react";
-import UserIDIcon from "../../assets/icons/UserIDIcon";
-import EmailIcon from "../../assets/icons/EmailIcon";
+import React, { useState } from "react";
+import UserIDIcon from "../../assets/icons/formIcons/UserIDIcon";
+import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
 import PasswordInput from "../UI/PasswordInput";
 import Input from "../UI/Input";
-const Inputs = ({formData,setFormData}) => {
-
+const Inputs = ({ formData, setFormData, LogInPage }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -14,22 +13,24 @@ const Inputs = ({formData,setFormData}) => {
   };
   return (
     <>
-      <div className="flex w-full gap-5">
-        <Input
-          name="FirstName"
-          type="text"
-          placeholder="First name"
-          Icon={UserIDIcon}
-          onChange={handleChange}
-        />
-        <Input
-          name="LastName"
-          type="text"
-          placeholder="Last name"
-          Icon={UserIDIcon}
-          onChange={handleChange}
-        />
-      </div>
+      {LogInPage && (
+        <div className="flex w-full gap-5">
+          <Input
+            name="FirstName"
+            type="text"
+            placeholder="First name"
+            Icon={UserIDIcon}
+            onChange={handleChange}
+          />
+          <Input
+            name="LastName"
+            type="text"
+            placeholder="Last name"
+            Icon={UserIDIcon}
+            onChange={handleChange}
+          />
+        </div>
+      )}
       <Input
         name="Email"
         type="text"

@@ -2,9 +2,9 @@ import React from "react";
 import Image from "../assets/images/mountains.jpg";
 import LineSvg2 from "../assets/SVG/LineSvg2";
 import { Link } from "react-router-dom";
-import Form from "../components/form/Form";
-
-const SignIn = () => {
+import EmailForm from "../components/form/EmailForm";
+import ArrowLeftIcon from "../assets/icons/ArrowLeftIcon";
+const ForgotPassword = () => {
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
       <div
@@ -22,27 +22,26 @@ const SignIn = () => {
           </header>
           <div className="flex flex-col w-[53%] h-full mt-20 z-10">
             <div className="flex flex-col gap-6 select-none">
-              <span className="text-gray-400 font-bold">WELCOME BACK</span>
+              <Link
+                to='/signin'
+                className="flex text-gray-400 font-bold w-fit"
+              >
+                <ArrowLeftIcon />
+                GO BACK
+              </Link>
               <h1 className="flex flex-wrap items-end text-white text-5xl font-bold gap-1 leading-10">
-                <span className="mr-2">Sign in to</span>{" "}
+                <span className="mr-2">Reset your</span>{" "}
                 <span className="flex items-end">
                   {" "}
-                  account
+                  password
                   <span className="h-2 w-2 rounded-full bg-customColor-blue ml-1"></span>
                 </span>
               </h1>
-
               <p className="text-gray-400 font-bold">
-                Don't have an account?{" "}
-                <Link
-                  to="/sign-up"
-                  className="cursor-pointer text-customColor-blue"
-                >
-                  Sign Up
-                </Link>
+                After clicking "Send Link", an email will be sent to you with
+                instructions to reset your password.
               </p>
-              <Form showNameInputs={false}/>
-              
+              <EmailForm />
             </div>
           </div>
           <LineSvg2
@@ -56,4 +55,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

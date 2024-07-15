@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-
+import { Link } from "react-router-dom";
 import Inputs from "./Inputs";
 import Auth from "./Auth";
-const Form = () => {
+const Form = ({ LogInPage }) => {
   const [formData, setFormData] = useState({});
 
   const [useAuth, setUseAuth] = useState(false);
@@ -16,7 +16,18 @@ const Form = () => {
         {useAuth ? (
           <Auth />
         ) : (
-          <Inputs formData={formData} setFormData={setFormData} />
+          <>
+            <Inputs
+              formData={formData}
+              setFormData={setFormData}
+              LogInPage={LogInPage}
+            />
+            {!LogInPage && (
+              <button type="button" className="flex items-center w-full px-5 py-3 rounded-lg border-2 border-[#262a36] text-white underline">
+                <Link to="/forgot-password">Forgot your password?</Link>
+              </button>
+            )}
+          </>
         )}
       </div>
       <div className="flex gap-5 w-5/6 ">
@@ -31,7 +42,7 @@ const Form = () => {
           type="submit"
           className="px-4 py-3 bg-customColor-blue rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
         >
-          Create account
+          Log In
         </button>
       </div>
     </form>

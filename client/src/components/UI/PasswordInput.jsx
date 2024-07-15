@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import OpenEyeIcon from "../../assets/icons/OpenEyeIcon";
-import ClosedEyeIcon from "../../assets/icons/ClosedEyeIcon";
+import OpenEyeIcon from "../../assets/icons/formIcons/OpenEyeIcon";
+import ClosedEyeIcon from "../../assets/icons/formIcons/ClosedEyeIcon";
 const PasswordInput = ({ name, placeholder, onChange }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
