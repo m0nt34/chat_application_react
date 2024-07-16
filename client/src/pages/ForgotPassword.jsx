@@ -23,7 +23,7 @@ const ForgotPassword = () => {
           <div className="flex flex-col w-[53%] h-full mt-20 z-10">
             <div className="flex flex-col gap-6 select-none">
               <Link
-                to='/signin'
+                to='/sign-in'
                 className="flex text-gray-400 font-bold w-fit"
               >
                 <ArrowLeftIcon />

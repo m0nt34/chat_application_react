@@ -13,7 +13,7 @@ const Inputs = ({ formData, setFormData, LogInPage }) => {
   };
   return (
     <>
-      {LogInPage && (
+      {!LogInPage && (
         <div className="flex w-full gap-5">
           <Input
             name="FirstName"

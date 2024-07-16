@@ -41,7 +41,7 @@ const SignIn = () => {
                   Sign Up
                 </Link>
               </p>
-              <Form showNameInputs={false}/>
+              <Form LogInPage={true}/>
               
             </div>
           </div>

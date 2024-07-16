@@ -38,7 +38,7 @@ const PasswordsForm = () => {
         type="submit"
         className="bg-customColor-blue text-white w-full rounded-full py-3 hover:opacity-90 active:opacity-80 transition mt-4"
         >
-        Send Link
+        Reset Password
       </button>
         </div>
     </form>

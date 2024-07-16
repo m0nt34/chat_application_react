@@ -3,6 +3,7 @@ import Image from "../assets/images/mountains.jpg";
 import LineSvg from "../assets/SVG/LineSvg";
 import { Link } from "react-router-dom";
 import Form from "../components/form/Form";
+import SignUpForm from "../components/form/SignUpForm";
 const SignUp = () => {
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
@@ -40,7 +41,9 @@ const SignUp = () => {
                   Log In
                 </Link>
               </p>
-              <Form LogInPage={true} />
+              
+              <SignUpForm />
+              
             </div>
           </div>
           <LineSvg

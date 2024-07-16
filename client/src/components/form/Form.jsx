@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Inputs from "./Inputs";
 import Auth from "./Auth";
-const Form = ({ LogInPage }) => {
+const Form = ({ LogInPage, setOtpSection }) => {
   const [formData, setFormData] = useState({});
 
   const [useAuth, setUseAuth] = useState(false);
@@ -10,6 +10,7 @@ const Form = ({ LogInPage }) => {
     e.preventDefault();
     console.log(formData);
   };
+
   return (
     <form className="flex flex-col gap-10 " onSubmit={handleSubmit}>
       <div className="flex flex-col w-5/6 py-2 gap-5">
@@ -22,8 +23,11 @@ const Form = ({ LogInPage }) => {
               setFormData={setFormData}
               LogInPage={LogInPage}
             />
-            {!LogInPage && (
-              <button type="button" className="flex items-center w-full px-5 py-3 rounded-lg border-2 border-[#262a36] text-white underline">
+            {LogInPage && (
+              <button
+                type="button"
+                className="flex items-center w-full px-5 py-3 rounded-lg border-2 border-[#262a36] text-white underline"
+              >
                 <Link to="/forgot-password">Forgot your password?</Link>
               </button>
             )}
@@ -39,10 +43,15 @@ const Form = ({ LogInPage }) => {
           Change method
         </button>
         <button
-          type="submit"
+          type="button"
           className="px-4 py-3 bg-customColor-blue rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
+          onClick={() => {
+            if (!LogInPage) {
+              setOtpSection();
+            }
+          }}
         >
-          Log In
+          {!LogInPage ? "Sign Up" : "Log In"}
         </button>
       </div>
     </form>
