@@ -13,9 +13,20 @@ const OtpInput = ({ length, onOtpSubmit }) => {
     if (combinedOtp.length === length) {
       onOtpSubmit(combinedOtp);
     }
+    if (value && i < length - 1 && inputRefs.current[i + 1]) {
+      inputRefs.current[i + 1].focus();
+    }
   };
-  const handleClick = () => {};
-  const handleKeyDown = () => {};
+  const handleClick = (i) => {
+    inputRefs.current[i].setSelectionRange(1,1)
+  };
+  const handleKeyDown = (i, e) => {
+    if (e.key === "Backspace" && !otp[i] && i > 0 && inputRefs.current[i - 1]) {
+      console.log(12);
+      inputRefs.current[i - 1].focus();
+    }
+    
+  };
   useEffect(() => {
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();

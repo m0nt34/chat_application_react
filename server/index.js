@@ -2,12 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import configs from "./src/configs/config.js";
-
+import routes from "./src/routes/route.js";
 dotenv.config();
 const app = express();
 
 app.use(configs);
-
+app.use("/", routes);
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
