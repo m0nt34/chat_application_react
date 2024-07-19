@@ -22,14 +22,12 @@ const PasswordsForm = () => {
 
       <PasswordInput
         name="Password"
-        
         placeholder="Password"
         Icon={EmailIcon}
         onChange={handleChange}
         />
       <PasswordInput
         name="CPassword"
-        
         placeholder="Confirm Password"
         Icon={EmailIcon}
         onChange={handleChange}

@@ -6,7 +6,6 @@ const OtpForm = ({ formData }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
   };
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-5/6 mt-8">
