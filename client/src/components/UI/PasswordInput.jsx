@@ -19,7 +19,7 @@ const PasswordInput = ({ name, placeholder, onChange }) => {
       <button
         type="button"
         aria-label={showPassword ? "Hide password" : "Show password"}
-        className="-translate-y-1/4 text-gray-400 focus:outline-none"
+        className="-translate-y-1/4 text-gray-400 focus:outline-none px-3"
         onClick={() => setShowPassword(!showPassword)}
       >
         {showPassword ? <OpenEyeIcon /> : <ClosedEyeIcon />}

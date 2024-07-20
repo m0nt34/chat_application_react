@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
 import Input from "../UI/Input";
+import { emailValidation } from "../../utils/formValidations";
 const EmailForm = () => {
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
@@ -9,16 +10,19 @@ const EmailForm = () => {
       ...formData,
       [name]: value,
     });
-    console.log(formData);
+  
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    if(emailValidation(formData)){
+
+      console.log(formData);
+    }
   };
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 mt-8">
       <Input
-        name="P"
+        name="email"
         type="text"
         placeholder="Email"
         Icon={EmailIcon}

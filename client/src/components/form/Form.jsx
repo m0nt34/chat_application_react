@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Inputs from "./Inputs";
 import Auth from "./Auth";
-
+import {
+  signupValidation,
+  signinValidation,
+} from "../../utils/formValidations";
 const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
   const [useAuth, setUseAuth] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    if (LogInPage && signinValidation(formData)) {
+      console.log(formData);
+    }
   };
   useEffect(() => {
     setFormData({});
-  
   }, []);
   return (
     <form className="flex flex-col gap-10 " onSubmit={handleSubmit}>
@@ -48,10 +52,9 @@ const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
           type={LogInPage ? "submit" : "button"}
           className="px-4 py-3 bg-customColor-blue rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
           onClick={() => {
-            if (!LogInPage) {
+            if (!LogInPage && signupValidation(formData)) {
               setOtpSection();
             }
-            
           }}
         >
           {!LogInPage ? "Sign Up" : "Log In"}

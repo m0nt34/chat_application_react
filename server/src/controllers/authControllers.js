@@ -13,14 +13,15 @@ export default {
   createUser: async (req, res) => {
     try {
       const userInfo = req.body;
-
-      if (!userInfo.password || userInfo.password.length < 8) {
-        return res
-          .status(400)
-          .json({ message: "Password must be at least 8 characters long." });
-      }
-
-      userInfo.password = await bcrypt.hash(userInfo.password, 10);
+      // if (!userInfo.password || userInfo.password.length < 8) {
+      //   return res
+      //   .status(400)
+      //   .json({ message: "Password must be at least 8 characters long." });
+      // }
+       
+      console.log(userInfo);
+      const hashedPassword = await bcrypt.hash(userInfo.password, 10);
+      userInfo.password = hashedPassword
       const savedUser = await new Users(userInfo).save();
 
       return res.status(201).json(savedUser);

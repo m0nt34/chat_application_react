@@ -14,7 +14,7 @@ const Input = ({ name, type, placeholder, Icon, onChange }) => {
       <span className="absolute left-5 -translate-y-1/2 top-[10px] text-xs text-gray-400 pointer-events-none transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-[10px] peer-focus:text-customColor-blue peer-focus:text-xs">
         {placeholder}
       </span>
-      <div className="-translate-y-1/4">{Icon && <Icon />}</div>
+      <div className="-translate-y-1/4 px-3">{Icon && <Icon />}</div>
     </div>
   );
 };

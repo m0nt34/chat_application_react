@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const OtpInput = ({ length, onOtpSubmit }) => {
+const OtpInput = ({ length, currentOtp }) => {
   const [otp, setOtp] = useState(new Array(length).fill(""));
   const inputRefs = useRef([]);
   const handleChange = (i, e) => {
@@ -10,22 +10,21 @@ const OtpInput = ({ length, onOtpSubmit }) => {
     setOtp(newOtp);
 
     const combinedOtp = newOtp.join("");
-    if (combinedOtp.length === length) {
-      onOtpSubmit(combinedOtp);
-    }
+
+    currentOtp.current = combinedOtp;
+
     if (value && i < length - 1 && inputRefs.current[i + 1]) {
       inputRefs.current[i + 1].focus();
     }
   };
   const handleClick = (i) => {
-    inputRefs.current[i].setSelectionRange(1,1)
+    inputRefs.current[i].setSelectionRange(1, 1);
   };
   const handleKeyDown = (i, e) => {
     if (e.key === "Backspace" && !otp[i] && i > 0 && inputRefs.current[i - 1]) {
       console.log(12);
       inputRefs.current[i - 1].focus();
     }
-    
   };
   useEffect(() => {
     if (inputRefs.current[0]) {

@@ -16,14 +16,14 @@ const Inputs = ({ formData, setFormData, LogInPage }) => {
       {!LogInPage && (
         <div className="flex w-full gap-5">
           <Input
-            name="FirstName"
+            name="name"
             type="text"
             placeholder="First name"
             Icon={UserIDIcon}
             onChange={handleChange}
           />
           <Input
-            name="LastName"
+            name="lastName"
             type="text"
             placeholder="Last name"
             Icon={UserIDIcon}
@@ -32,14 +32,14 @@ const Inputs = ({ formData, setFormData, LogInPage }) => {
         </div>
       )}
       <Input
-        name="Email"
+        name="email"
         type="text"
         placeholder="Email"
         Icon={EmailIcon}
         onChange={handleChange}
       />
       <PasswordInput
-        name="Password"
+        name="password"
         placeholder="Password"
         onChange={handleChange}
       />
