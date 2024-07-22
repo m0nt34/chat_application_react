@@ -141,11 +141,11 @@ export const OTPValidation = (otp) => {
   const otpRegex = /^[A-Z0-9]+$/;
 
   if (!otp || otp.length !== 6) {
-    showErrorMessage("Please fully fill otp field");
+    showErrorMessage("OTP must be exactly 6 characters long.");
     return false;
   }
   if (!otpRegex.test(otp)) {
-    showErrorMessage("Please use valid otp code");
+    showErrorMessage("OTP must contain only uppercase letters and numbers.");
     return false;
   }
   return true;

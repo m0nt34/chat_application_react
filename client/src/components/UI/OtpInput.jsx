@@ -22,8 +22,17 @@ const OtpInput = ({ length, currentOtp }) => {
   };
   const handleKeyDown = (i, e) => {
     if (e.key === "Backspace" && !otp[i] && i > 0 && inputRefs.current[i - 1]) {
-      console.log(12);
       inputRefs.current[i - 1].focus();
+    }
+    if (e.key === "ArrowLeft"&&i > 0) {
+      const previousInput = inputRefs.current[i - 1];
+      previousInput.focus();
+      setTimeout(() => {
+        previousInput.setSelectionRange(previousInput.value.length, previousInput.value.length);
+      }, 0);
+    }
+    if (e.key === "ArrowRight"&&i < length-1) {
+      inputRefs.current[i + 1].focus();
     }
   };
   useEffect(() => {

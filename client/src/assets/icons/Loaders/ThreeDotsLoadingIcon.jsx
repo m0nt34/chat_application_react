@@ -8,7 +8,7 @@ const ThreeDotsLoadingIcon = () => {
     
       role="img"
       xmlns="http://www.w3.org/2000/svg"
-      
+      className="absolute h-12"
     >
       <g fill="currentColor">
         <circle cx="4" cy="12" r="0" fill="currentColor">

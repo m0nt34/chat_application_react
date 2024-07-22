@@ -6,12 +6,30 @@ import {
   signupValidation,
   signinValidation,
 } from "../../utils/formValidations";
+
+import { checkIfuserExists,sendOtpEmail } from "../../services/authServices";
+import { showErrorMessage } from "../../utils/validation";
+import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
 const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
   const [useAuth, setUseAuth] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (LogInPage && signinValidation(formData)) {
       console.log(formData);
+    }
+  };
+  const setOtpSectionFunc = async () => {
+    if (!LogInPage && signupValidation(formData)) {
+      setLoading(true);
+      const res = await checkIfuserExists(formData.email);
+      if (!res.error) {
+        await sendOtpEmail(formData.email)
+        await setOtpSection();
+      } else {
+        showErrorMessage(res.message);
+      }
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -45,19 +63,21 @@ const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
           type="button"
           className="px-4 py-3 bg-slate-400 rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
           onClick={() => setUseAuth(!useAuth)}
+          disabled={loading}
         >
           Change method
         </button>
         <button
           type={LogInPage ? "submit" : "button"}
-          className="px-4 py-3 bg-customColor-blue rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
-          onClick={() => {
-            if (!LogInPage && signupValidation(formData)) {
-              setOtpSection();
-            }
-          }}
+          className="relative flex items-center justify-center px-4 py-3 bg-customColor-blue rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
+          onClick={setOtpSectionFunc}
+          disabled={loading}
         >
-          {!LogInPage ? "Sign Up" : "Log In"}
+          {loading ? (
+            <ThreeDotsLoadingIcon />
+          ) : (
+            <>{!LogInPage ? "Sign Up" : "Log In"}</>
+          )}
         </button>
       </div>
     </form>
