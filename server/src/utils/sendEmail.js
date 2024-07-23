@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const sendOTPCodeToEmail = async (email, otp, res) => {
+const sendEmail = async (email, emailSubject, emailText, res) => {
   let transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -12,23 +12,8 @@ const sendOTPCodeToEmail = async (email, otp, res) => {
   let mailOptions = {
     from: "redmerabi@gmail.com",
     to: email,
-    subject: "Account Confirmation OTP Code",
-    text: `
-    Dear User,
-
-    Thank you for registering with our chat application.
-
-    To complete your account confirmation, please use the following OTP code:
-
-    ${otp}
-
-    If you did not attempt to register or create an account with our application, please disregard this email. 
-
-    If you have any questions or need assistance, do not hesitate to contact our support team.
-
-    Best regards,
-    The Chat Application Team
-    `,
+    subject: emailSubject,
+    text: emailText,
   };
 
   try {
@@ -42,4 +27,4 @@ const sendOTPCodeToEmail = async (email, otp, res) => {
   }
 };
 
-export { sendOTPCodeToEmail };
+export { sendEmail };

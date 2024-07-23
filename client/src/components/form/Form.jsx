@@ -7,16 +7,22 @@ import {
   signinValidation,
 } from "../../utils/formValidations";
 
-import { checkIfuserExists,sendOtpEmail } from "../../services/authServices";
+import { checkIfuserExists,sendOtpEmail,signInService } from "../../services/authServices";
 import { showErrorMessage } from "../../utils/validation";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
 const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
   const [useAuth, setUseAuth] = useState(false);
   const [loading, setLoading] = useState(false);
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (LogInPage && signinValidation(formData)) {
-      console.log(formData);
+      const res = await signInService(formData)
+
+      if(res.error){
+        showErrorMessage(res.message)
+      }else{
+        console.log("user login")
+      }
     }
   };
   const setOtpSectionFunc = async () => {

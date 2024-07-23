@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import Users from "../models/userModel.js";
-import passwordCheck from "../utils/passwordCheck.js";
 import {
   createAccessTokenCookie,
   createRefreshTokenCookie,
@@ -11,7 +10,9 @@ import {
 } from "../utils/generateToken.js";
 import { generateOtp } from "../utils/createOtp.js";
 import { storeOtp, getOtp } from "../utils/otpStore.js";
-import { sendOTPCodeToEmail } from "../utils/sendEmail.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import { generateHexCode } from "../utils/generateCode.js";
+import { passwordCheck } from "../utils/passwordCheck.js";
 export default {
   userExists: async (req, res) => {
     try {
@@ -47,7 +48,24 @@ export default {
       const { email } = req.body;
       const otp = await generateOtp();
       await storeOtp(email, otp);
-      await sendOTPCodeToEmail(email, otp, res);
+      const emailSubject = "Account Confirmation OTP Code";
+      const emailText = `
+    Dear User,
+
+    Thank you for registering with our chat application.
+
+    To complete your account confirmation, please use the following OTP code:
+
+    ${otp}
+
+    If you did not attempt to register or create an account with our application, please disregard this email. 
+
+    If you have any questions or need assistance, do not hesitate to contact our support team.
+
+    Best regards,
+    The Chat Application Team
+    `;
+      await sendEmail(email, emailSubject,emailText, res);
       return res.status(200).json({
         error: false,
       });
@@ -57,7 +75,7 @@ export default {
         .status(500)
         .json({ error: true, message: "Error creating user", error: err });
     }
-  }, 
+  },
   checkOtp: async (req, res) => {
     try {
       const { email, otp } = req.body;
@@ -95,29 +113,43 @@ export default {
 
       const hashedPassword = await bcrypt.hash(userInfo.password, 10);
       userInfo.password = hashedPassword;
-      const savedUser = await new Users(userInfo).save();
+      const code = await generateHexCode();
+      const updatedInfo = new Users({
+        ...userInfo,
+        code,
+      });
+      const savedUser = await new Users(updatedInfo).save();
 
-      return res.status(201).json(savedUser);
-    } catch (err) {
-      console.error(err);
+      return res.status(201).json({ error: false, data: savedUser });
+    } catch (error) {
+      console.error(error);
       return res
         .status(500)
-        .json({ message: "Error creating user", error: err });
+        .json({ message: "Error creating user", error: error });
     }
   },
   loginUser: async (req, res) => {
     const { email, password } = req.body;
 
     try {
-      const foundUser = await Users.find({ email });
-      if (!foundUser.length) throw new Error("email isn't correct!");
+      const foundUser = await Users.findOne({ email });
+      if (!foundUser) {
+        return res.status(404).json({ error: true, message: "User not found" });
+      }
 
-      const isPasswordMatch = passwordCheck(foundUser[0].password, password);
+      const isPasswordMatch = await passwordCheck(foundUser.password, password);
 
-      if (!isPasswordMatch) throw new Error("Password do not match!");
+      if (!isPasswordMatch) {
+        return res.status(401).json({
+          error: true,
+          message: "Invalid password",
+        });
+      }
 
-      const accessToken = await generateAccessToken(userID);
-      const refreshToken = await generateRefreshToken(userID);
+      const userIdString = foundUser._id.toString();
+
+      const accessToken = await generateAccessToken(userIdString);
+      const refreshToken = await generateRefreshToken(userIdString);
 
       await createAccessTokenCookie(res, accessToken);
       await createRefreshTokenCookie(res, refreshToken);
@@ -151,11 +183,11 @@ export default {
           return res.json({ isAuthenticated: true, userID: decoded.userID });
         }
       );
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       return res
         .status(500)
-        .json({ message: "Error verifying authentication", error: err });
+        .json({ message: "Error verifying authentication", error: error });
     }
   },
 
@@ -168,5 +200,31 @@ export default {
       console.error(err);
       return res.status(500).json({ message: "Error logging out", error: err });
     }
+  },
+  sendLink: async(req, res) => {
+    try {
+      const { email } = req.body;
+      const emailSubject = "Account Confirmation OTP Code";
+      const emailText = `
+    Dear User,
+
+    Thank you for registering with our chat application.
+
+    To complete your account confirmation, please use the following OTP code:
+
+    http://localhost:5173/reset-password/${token}
+
+    If you did not attempt to register or create an account with our application, please disregard this email. 
+
+    If you have any questions or need assistance, do not hesitate to contact our support team.
+
+    Best regards,
+    The Chat Application Team
+    `;
+      await sendEmail(email, emailSubject,emailText, res);
+      return res.status(200).json({
+        error: false,
+      });
+    } catch (error) {}
   },
 };

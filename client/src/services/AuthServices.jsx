@@ -31,10 +31,11 @@ export const sendOtpEmail = async (email) => {
     };
   }
 };
-export const checkOtpCode = async (email,otp) => {
+export const checkOtpCode = async (email, otp) => {
   try {
     const res = await axios.post("http://localhost:3000/auth/check/otp", {
-      email,otp
+      email,
+      otp,
     });
     return res.data;
   } catch (error) {
@@ -42,10 +43,33 @@ export const checkOtpCode = async (email,otp) => {
       error: true,
       message:
         error.response?.data?.message ||
-        "An error occurred while checking code.",
+        "An error occurred while checking otp.",
     };
   }
 };
 export const signUpService = async (data) => {
-  const res = await axios.post("http://localhost:3000/auth/signup", data);
+  try {
+    const res = await axios.post("http://localhost:3000/auth/signup", data);
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message:
+        error.response?.data?.message ||
+        "An error occurred while creating user.",
+    };
+  }
+};
+export const signInService = async (data) => {
+  try {
+    const res = await axios.post("http://localhost:3000/auth/login", data);
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message:
+        error.response?.data?.message ||
+        "Login failed. Please check your credentials and try again.",
+    };
+  }
 };

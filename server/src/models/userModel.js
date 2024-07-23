@@ -18,7 +18,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  avatar: { type: String },
+  friends: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "users",
+    default: [],
+  },
+  code: {
+    type: String,
+    unique: true,
+  },
+  avatar: {
+    type: String,
+    default: "",
+  },
 });
 
 const Users = mongoose.model("user", userSchema, "users");

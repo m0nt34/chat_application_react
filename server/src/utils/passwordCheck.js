@@ -7,4 +7,4 @@ async function passwordCheck(UserPasswordConfirm, UserHashPassword) {
   return isPassMatch;
 }
 
-export default passwordCheck;
+export { passwordCheck };
