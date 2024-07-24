@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
 import Input from "../UI/Input";
+import { useNavigate } from "react-router-dom";
 import { emailValidation } from "../../utils/formValidations";
+import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
+import { sendPasswordResetLink } from "../../services/authServices";
+import { showErrorMessage, showSuccessMessage } from "../../utils/validation";
 const EmailForm = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -10,13 +16,19 @@ const EmailForm = () => {
       ...formData,
       [name]: value,
     });
-  
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if(emailValidation(formData)){
-
-      console.log(formData);
+    if (emailValidation(formData)) {
+      setLoading(true);
+      const res = await sendPasswordResetLink(formData.email);
+      if (res.error) {
+        showErrorMessage(res.message);
+      } else {
+        showSuccessMessage("Link was sent successfully.");
+        navigate("/sign-in");
+      }
+      setLoading(false);
     }
   };
   return (
@@ -30,9 +42,9 @@ const EmailForm = () => {
       />
       <button
         type="submit"
-        className="bg-customColor-blue text-white w-full rounded-full py-3 hover:opacity-90 active:opacity-80 transition"
+        className="relative flex items-center justify-center px-4 py-3 h-[48px] bg-customColor-blue rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
       >
-        Send Link
+        {loading ? <ThreeDotsLoadingIcon /> : <>Send Link</>}
       </button>
     </form>
   );

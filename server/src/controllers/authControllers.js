@@ -1,18 +1,13 @@
 import bcrypt from "bcrypt";
 import Users from "../models/userModel.js";
-import {
-  createAccessTokenCookie,
-  createRefreshTokenCookie,
-} from "../utils/cookieUtils.js";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../utils/generateToken.js";
+import { createCookie } from "../utils/cookieUtils.js";
+import { generateToken } from "../utils/generateToken.js";
 import { generateOtp } from "../utils/createOtp.js";
 import { storeOtp, getOtp } from "../utils/otpStore.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateHexCode } from "../utils/generateCode.js";
 import { passwordCheck } from "../utils/passwordCheck.js";
+import jwt from "jsonwebtoken";
 export default {
   userExists: async (req, res) => {
     try {
@@ -50,22 +45,21 @@ export default {
       await storeOtp(email, otp);
       const emailSubject = "Account Confirmation OTP Code";
       const emailText = `
-    Dear User,
+      Dear User,
 
-    Thank you for registering with our chat application.
+      Thank you for registering with our chat application.
 
-    To complete your account confirmation, please use the following OTP code:
+      To complete your account confirmation, please use the following OTP code:
 
-    ${otp}
+      ${otp}
 
-    If you did not attempt to register or create an account with our application, please disregard this email. 
+      If you did not attempt to register or create an account with our application, please disregard this email. 
 
-    If you have any questions or need assistance, do not hesitate to contact our support team.
+      If you have any questions or need assistance, do not hesitate to contact our support team.
 
-    Best regards,
-    The Chat Application Team
-    `;
-      await sendEmail(email, emailSubject,emailText, res);
+      Best regards,
+      The Chat Application Team`;
+      await sendEmail(email, emailSubject, emailText, res);
       return res.status(200).json({
         error: false,
       });
@@ -125,7 +119,7 @@ export default {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Error creating user", error: error });
+        .json({ error: true, message: "Error creating user", error: error });
     }
   },
   loginUser: async (req, res) => {
@@ -148,12 +142,24 @@ export default {
 
       const userIdString = foundUser._id.toString();
 
-      const accessToken = await generateAccessToken(userIdString);
-      const refreshToken = await generateRefreshToken(userIdString);
+      const accessToken = await generateToken(
+        userIdString,
+        process.env.ACCESS_TOKEN_SECRET,
+        "1d"
+      );
+      const refreshToken = await generateToken(
+        userIdString,
+        process.env.REFRESH_TOKEN_SECRET,
+        "7d"
+      );
 
-      await createAccessTokenCookie(res, accessToken);
-      await createRefreshTokenCookie(res, refreshToken);
-
+      await createCookie(res, "accessToken", accessToken, 24 * 60 * 60 * 1000);
+      await createCookie(
+        res,
+        "refreshToken",
+        refreshToken,
+        7 * 24 * 60 * 60 * 1000
+      );
       return res.status(200).json({
         error: false,
       });
@@ -185,9 +191,11 @@ export default {
       );
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Error verifying authentication", error: error });
+      return res.status(500).json({
+        error: true,
+        message: "Error verifying authentication",
+        error: error,
+      });
     }
   },
 
@@ -195,36 +203,112 @@ export default {
     try {
       res.clearCookie("accessToken");
       res.clearCookie("refreshToken");
-      return res.status(200).json({ message: "Logout successful" });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Error logging out", error: err });
+      return res
+        .status(200)
+        .json({ error: false, message: "Logout successful" });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Error logging out", error: error });
     }
   },
-  sendLink: async(req, res) => {
+  sendLink: async (req, res) => {
     try {
       const { email } = req.body;
-      const emailSubject = "Account Confirmation OTP Code";
+      if (!email) {
+        return res.status(400).json({
+          error: true,
+          message: "Email is required",
+        });
+      }
+      const foundUser = await Users.findOne({ email });
+      if (!foundUser) {
+        return res.status(404).json({ error: true, message: "User not found" });
+      }
+      const userIdString = foundUser._id.toString();
+      const token = generateToken(userIdString, process.env.LINK_TOKEN, "5m");
+      const emailSubject = "Password Reset Request";
       const emailText = `
-    Dear User,
+      Dear User,
 
-    Thank you for registering with our chat application.
+      We received a request to reset the password for your account. 
 
-    To complete your account confirmation, please use the following OTP code:
+      To proceed with resetting your password, please use the following link:
 
-    http://localhost:5173/reset-password/${token}
+      http://localhost:5173/reset-password/${token}
+ 
+      If you did not request a password reset, please ignore this email. Your password will remain unchanged.
 
-    If you did not attempt to register or create an account with our application, please disregard this email. 
+      If you have any questions or need further assistance, please contact our support team.
 
-    If you have any questions or need assistance, do not hesitate to contact our support team.
-
-    Best regards,
-    The Chat Application Team
-    `;
-      await sendEmail(email, emailSubject,emailText, res);
+      Best regards,
+      The Chat Application Team`;
+      await sendEmail(email, emailSubject, emailText, res);
       return res.status(200).json({
         error: false,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Error sending link", error: error });
+    }
+  },
+  checkLink: async (req, res) => {
+    try {
+      const { token } = req.body;
+      const decoded = await jwt.verify(
+        token,
+        process.env.LINK_TOKEN,
+        (err, decoded) => {
+          if (err) {
+            return res.status(401).json({ error: true, message: err });
+          } else {
+            return decoded;
+          }
+        }
+      );
+
+      const userID = decoded.userID;
+
+      res.json({ error: false ,data:userID});
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Token expired", error: error.message });
+    }
+  },
+  changePassword: async (req, res) => {
+    try {
+      const { userID, password } = req.body;
+
+      if (!userID || !password) {
+        return res
+          .status(400)
+          .json({ error: true, message: "User ID and password are required" });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const updatedUser = await Users.findByIdAndUpdate(
+        userID,
+        { password: hashedPassword },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ error: true, message: "User not found" });
+      }
+      res.json({ error: false, message: "Password updated successfully" });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: true,
+          message: "Failed to update password",
+          error: error,
+        });
+    }
   },
 };

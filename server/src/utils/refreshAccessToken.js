@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { generateAccessToken } from "./generateToken.js";
-import { createAccessTokenCookie } from "./cookieUtils.js";
+import { generateToken } from "./generateToken.js";
+import { createCookie } from "./cookieUtils.js";
 
 const refreshAccessToken = async (req, res, refreshToken) => {
   await jwt.verify(
@@ -12,9 +12,13 @@ const refreshAccessToken = async (req, res, refreshToken) => {
       }
 
       const userID = decoded.userID;
-      const accessToken = generateAccessToken(userID);
+      const accessToken = generateToken(
+        userID,
+        process.env.ACCESS_TOKEN_SECRET,
+        "1d"
+      );
 
-      createAccessTokenCookie(res, accessToken);
+      createCookie(res, "accessToken", accessToken, 24 * 60 * 60 * 1000);
     }
   );
 };

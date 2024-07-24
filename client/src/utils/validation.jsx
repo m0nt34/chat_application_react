@@ -14,3 +14,6 @@ export const isValidPassword = (password) => password.length >= 6 && password.le
 export const showErrorMessage = (message) => {
   toast.error(message);
 };
+export const showSuccessMessage = (message) => {
+  toast.success(message);
+};

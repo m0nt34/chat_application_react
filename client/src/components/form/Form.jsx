@@ -7,22 +7,28 @@ import {
   signinValidation,
 } from "../../utils/formValidations";
 
-import { checkIfuserExists,sendOtpEmail,signInService } from "../../services/authServices";
+import {
+  checkIfuserExists,
+  sendOtpEmail,
+  signInService,
+} from "../../services/authServices";
 import { showErrorMessage } from "../../utils/validation";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
 const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
   const [useAuth, setUseAuth] = useState(false);
   const [loading, setLoading] = useState(false);
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (LogInPage && signinValidation(formData)) {
-      const res = await signInService(formData)
+      setLoading(true);
+      const res = await signInService(formData);
 
-      if(res.error){
-        showErrorMessage(res.message)
-      }else{
-        console.log("user login")
+      if (res.error) {
+        showErrorMessage(res.message);
+      } else {
+        console.log("user login"); //********************CONTINUE FROM HERE************************* */
       }
+      setLoading(false);
     }
   };
   const setOtpSectionFunc = async () => {
@@ -30,7 +36,7 @@ const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
       setLoading(true);
       const res = await checkIfuserExists(formData.email);
       if (!res.error) {
-        await sendOtpEmail(formData.email)
+        await sendOtpEmail(formData.email);
         await setOtpSection();
       } else {
         showErrorMessage(res.message);

@@ -7,6 +7,8 @@ import {
 } from "./validation";
 
 export const signupValidation = (data) => {
+  const noWhitespaceRegex = /^\S*$/;
+
   if (
     !isNotEmpty(data.name) ||
     !isNotEmpty(data.lastName) ||
@@ -30,6 +32,11 @@ export const signupValidation = (data) => {
     return false;
   }
 
+  if (!noWhitespaceRegex.test(data.name)) {
+    showErrorMessage("Your name must not contain whitespace characters");
+    return false;
+  }
+
   if (!isValidName(data.lastName)) {
     if (data.lastName.length > 50) {
       showErrorMessage("Your last name is too long");
@@ -40,6 +47,11 @@ export const signupValidation = (data) => {
       return false;
     }
     showErrorMessage("Your last name should only contain letters");
+    return false;
+  }
+
+  if (!noWhitespaceRegex.test(data.lastName)) {
+    showErrorMessage("Your last name must not contain whitespace characters");
     return false;
   }
 
@@ -58,6 +70,11 @@ export const signupValidation = (data) => {
     } else {
       showErrorMessage("Your password must be at least 6 characters long");
     }
+    return false;
+  }
+
+  if (!noWhitespaceRegex.test(data.password)) {
+    showErrorMessage("Your password must not contain whitespace characters");
     return false;
   }
 
@@ -108,6 +125,8 @@ export const emailValidation = (data) => {
 };
 
 export const passwordsValidation = (data) => {
+  const noWhitespaceRegex = /^\S*$/;
+
   if (!isNotEmpty(data.CPassword) || !isNotEmpty(data.password)) {
     showErrorMessage("Please fill all fields");
     return false;
@@ -121,8 +140,14 @@ export const passwordsValidation = (data) => {
     }
     return false;
   }
+
+  if (!noWhitespaceRegex.test(data.password)) {
+    showErrorMessage("Your password must not contain whitespace characters");
+    return false;
+  }
+
   if (!isValidPassword(data.CPassword)) {
-    if (data.password.length > 50) {
+    if (data.CPassword.length > 50) {
       showErrorMessage("Your confirm password is too long");
     } else {
       showErrorMessage(
@@ -131,12 +156,22 @@ export const passwordsValidation = (data) => {
     }
     return false;
   }
-  if (data.password !== data.CPassword) {
-    showErrorMessage("Paswords don't match");
+
+  if (!noWhitespaceRegex.test(data.CPassword)) {
+    showErrorMessage(
+      "Your confirm password must not contain whitespace characters"
+    );
     return false;
   }
+
+  if (data.password !== data.CPassword) {
+    showErrorMessage("Passwords don't match");
+    return false;
+  }
+
   return true;
 };
+
 export const OTPValidation = (otp) => {
   const otpRegex = /^[A-Z0-9]+$/;
 

@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
 import PasswordInput from "../UI/PasswordInput";
 import { passwordsValidation } from "../../utils/formValidations";
-const PasswordsForm = () => {
+import { resetPassword } from "../../services/authServices";
+import { showErrorMessage, showSuccessMessage } from "../../utils/validation";
+import { useNavigate } from "react-router-dom";
+const PasswordsForm = ({ userID }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -11,10 +15,16 @@ const PasswordsForm = () => {
       [name]: value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (passwordsValidation(formData)) {
-      console.log(formData);
+      const res = await resetPassword(userID, formData.password);
+      if (res.error) {
+        showErrorMessage(res.message);
+      } else {
+        showSuccessMessage("Password was changed successfuly");
+        navigate("/sign-in");
+      }
     }
   };
   return (
