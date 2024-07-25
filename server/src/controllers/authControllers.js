@@ -176,7 +176,7 @@ export default {
     try {
       const accessToken = req.cookies.accessToken || req.header("accessToken");
       if (!accessToken) {
-        return res.json({ isAuthenticated: false });
+        return res.status(401).json({ error:true });
       }
 
       await jwt.verify(
@@ -184,9 +184,11 @@ export default {
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
           if (err) {
-            return res.json({ isAuthenticated: false });
+            return res.status(401).json({ error: true });
           }
-          return res.json({ isAuthenticated: true, userID: decoded.userID });
+          return res.json({
+            error: false,
+          });
         }
       );
     } catch (error) {
@@ -272,7 +274,7 @@ export default {
 
       const userID = decoded.userID;
 
-      res.json({ error: false ,data:userID});
+      res.json({ error: false, data: userID });
     } catch (error) {
       console.log(error);
       return res
@@ -302,13 +304,11 @@ export default {
       res.json({ error: false, message: "Password updated successfully" });
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error: true,
-          message: "Failed to update password",
-          error: error,
-        });
+      res.status(500).json({
+        error: true,
+        message: "Failed to update password",
+        error: error,
+      });
     }
   },
 };

@@ -14,19 +14,20 @@ import {
 } from "../../services/authServices";
 import { showErrorMessage } from "../../utils/validation";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
+import { useAuth } from "../../store/authStore";
 const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
-  const [useAuth, setUseAuth] = useState(false);
+  const [inputs, setInputs] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { authToT } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (LogInPage && signinValidation(formData)) {
       setLoading(true);
       const res = await signInService(formData);
-
       if (res.error) {
         showErrorMessage(res.message);
       } else {
-        console.log("user login"); //********************CONTINUE FROM HERE************************* */
+        authToT();
       }
       setLoading(false);
     }
@@ -47,10 +48,11 @@ const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
   useEffect(() => {
     setFormData({});
   }, []);
+
   return (
     <form className="flex flex-col gap-10 " onSubmit={handleSubmit}>
       <div className="flex flex-col w-5/6 py-2 gap-5">
-        {useAuth ? (
+        {inputs ? (
           <Auth />
         ) : (
           <>
@@ -74,7 +76,7 @@ const Form = ({ LogInPage, setOtpSection, formData, setFormData }) => {
         <button
           type="button"
           className="px-4 py-3 bg-slate-400 rounded-full w-full text-white transition hover:opacity-90 active:opacity-80"
-          onClick={() => setUseAuth(!useAuth)}
+          onClick={() => setInputs(!inputs)}
           disabled={loading}
         >
           Change method

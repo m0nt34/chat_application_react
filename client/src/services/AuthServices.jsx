@@ -120,3 +120,14 @@ export const resetPassword = async (userID, password) => {
     };
   }
 };
+export const checkIfAuthenticated = async () => {
+  try {
+    const res = await axios.get("http://localhost:3000/auth/check");
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.message || "Failed to authenticate",
+    };
+  }
+};

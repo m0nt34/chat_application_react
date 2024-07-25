@@ -4,24 +4,25 @@ import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Layout from "./components/layout/Layout";
+import AuthRequired from "./components/AuthRequired/AuthRequired";
 import Home from "./pages/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+
 function App() {
   axios.defaults.withCredentials = true;
   return (
     <BrowserRouter>
       <>
         <Routes>
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route >
-
-            <Route element={<Layout/>}>
-
+          <Route path="/" element={<AuthRequired />}>
+            <Route path="sign-up" element={<SignUp />} />
+            <Route path="sign-in" element={<SignIn />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
             </Route>
           </Route>
         </Routes>
