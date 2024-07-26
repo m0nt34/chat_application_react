@@ -1,7 +1,7 @@
 import React from "react";
-import Image from "../assets/images/mountains.jpg";
-import LineSvg from "../assets/SVG/LineSvg";
-import SignUpLeftSide from "../components/SignUpLeftSide";
+import Image from "../../assets/images/mountains.jpg";
+import LineSvg from "../../assets/SVG/LineSvg";
+import SignUpLeftSide from "./SignUpLeftSide";
 
 const SignUp = () => {
   return (

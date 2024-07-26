@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import SignUp from "./pages/signup/SignUp";
+import SignIn from "./pages/signin/SignIn";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
+import ResetPassword from "./pages/resetPassword/ResetPassword";
 import Layout from "./components/layout/Layout";
 import AuthRequired from "./components/AuthRequired/AuthRequired";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";

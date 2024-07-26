@@ -23,16 +23,24 @@ const userSchema = new mongoose.Schema({
     ref: "users",
     default: [],
   },
+  chats: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "chats",
+    default: [],
+  },
   code: {
     type: String,
     unique: true,
+  },
+  banned: {
+    type: Boolean,
+    default: false,
   },
   avatar: {
     type: String,
     default: "",
   },
 });
-
 const Users = mongoose.model("user", userSchema, "users");
 
 export default Users;

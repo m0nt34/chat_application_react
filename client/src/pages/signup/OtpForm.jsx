@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import OtpInput from "../UI/OtpInput";
+import OtpInput from "./OtpInput";
 import {
   signUpService,
   checkOtpCode,

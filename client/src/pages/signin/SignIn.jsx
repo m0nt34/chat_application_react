@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Image from "../assets/images/mountains.jpg";
-import LineSvg2 from "../assets/SVG/LineSvg2";
-import SignInRightSide from "../components/SignInRightSide";
-import { toast } from "react-toastify";
+import React from "react";
+import Image from "../../assets/images/mountains.jpg";
+import LineSvg2 from "../../assets/SVG/LineSvg2";
+import SignInRightSide from "./SignInRightSide";
 const SignIn = () => {
 
   return (

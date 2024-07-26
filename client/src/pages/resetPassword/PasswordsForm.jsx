@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
-import PasswordInput from "../UI/PasswordInput";
+import PasswordInput from "../../components/UI/PasswordInput";
 import { passwordsValidation } from "../../utils/formValidations";
 import { resetPassword } from "../../services/authServices";
 import { showErrorMessage, showSuccessMessage } from "../../utils/validation";

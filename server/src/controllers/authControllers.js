@@ -177,7 +177,7 @@ export default {
       const accessToken = req.cookies.accessToken || req.header("accessToken");
       if (!accessToken) {
         return res.status(401).json({ error:true });
-      }
+      } 
 
       await jwt.verify(
         accessToken,
@@ -223,7 +223,7 @@ export default {
           error: true,
           message: "Email is required",
         });
-      }
+      }  
       const foundUser = await Users.findOne({ email });
       if (!foundUser) {
         return res.status(404).json({ error: true, message: "User not found" });
@@ -233,7 +233,7 @@ export default {
       const emailSubject = "Password Reset Request";
       const emailText = `
       Dear User,
-
+ 
       We received a request to reset the password for your account. 
 
       To proceed with resetting your password, please use the following link:
@@ -249,7 +249,7 @@ export default {
       await sendEmail(email, emailSubject, emailText, res);
       return res.status(200).json({
         error: false,
-      });
+      }); 
     } catch (error) {
       console.error(error);
       return res
@@ -260,17 +260,19 @@ export default {
   checkLink: async (req, res) => {
     try {
       const { token } = req.body;
+
       const decoded = await jwt.verify(
         token,
         process.env.LINK_TOKEN,
         (err, decoded) => {
           if (err) {
+  
             return res.status(401).json({ error: true, message: err });
           } else {
             return decoded;
           }
         }
-      );
+      ); 
 
       const userID = decoded.userID;
 

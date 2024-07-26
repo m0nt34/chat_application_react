@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
-import Input from "../UI/Input";
+import Input from "../../components/UI/Input";
 import { useNavigate } from "react-router-dom";
 import { emailValidation } from "../../utils/formValidations";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";

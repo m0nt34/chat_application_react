@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import OtpForm from "./form/OtpForm";
-import Form from "./form/Form";
-import ArrowLeftIcon from "../assets/icons/ArrowLeftIcon";
+import OtpForm from "./OtpForm";
+import Form from "../../components/form/Form";
+import ArrowLeftIcon from "../../assets/icons/ArrowLeftIcon";
 const SignUpLeftSide = () => {
   const [otpForm, setOtpForm] = useState(false);
   const [formData, setFormData] = useState({});

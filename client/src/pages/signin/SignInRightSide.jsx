@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Form from "./form/Form";
+import Form from "../../components/form/Form";
 const SignInRightSide = () => {
   const [formData, setFormData] = useState({});
   return (

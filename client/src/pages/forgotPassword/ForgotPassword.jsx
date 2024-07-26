@@ -1,9 +1,9 @@
 import React from "react";
-import Image from "../assets/images/mountains.jpg";
-import LineSvg2 from "../assets/SVG/LineSvg2";
+import Image from "../../assets/images/mountains.jpg";
+import LineSvg2 from "../../assets/SVG/LineSvg2";
 import { Link } from "react-router-dom";
-import EmailForm from "../components/form/EmailForm";
-import ArrowLeftIcon from "../assets/icons/ArrowLeftIcon";
+import EmailForm from "./EmailForm";
+import ArrowLeftIcon from "../../assets/icons/ArrowLeftIcon";
 const ForgotPassword = () => {
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
@@ -23,7 +23,7 @@ const ForgotPassword = () => {
           <div className="flex flex-col w-[53%] h-full mt-20 z-10">
             <div className="flex flex-col gap-6 select-none">
               <Link
-                to='/sign-in'
+                to="/sign-in"
                 className="flex text-gray-400 font-bold w-fit"
               >
                 <ArrowLeftIcon />

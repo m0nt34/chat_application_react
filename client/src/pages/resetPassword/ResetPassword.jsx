@@ -1,10 +1,10 @@
 import React, { useEffect, useState,useRef } from "react";
-import Image from "../assets/images/mountains.jpg";
-import LineSvg from "../assets/SVG/LineSvg";
-import PasswordsForm from "../components/form/PasswordsForm";
+import Image from "../../assets/images/mountains.jpg";
+import LineSvg from "../../assets/SVG/LineSvg";
+import PasswordsForm from "./PasswordsForm";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkTokenLink } from "../services/authServices";
-import { showErrorMessage,showSuccessMessage } from "../utils/validation";
+import { checkTokenLink } from "../../services/authServices";
+import { showErrorMessage } from "../../utils/validation";
 const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,8 +14,10 @@ const ResetPassword = () => {
 
   const sendNewPassword = async (token) => {
     const res = await checkTokenLink(token);
+    console.log(res);
     if (res.error && !errorShownRef.current) {
       showErrorMessage(res.message);
+      console.log("error accoured here");
       errorShownRef.current = true;
       navigate("/sign-in");
     } else {
