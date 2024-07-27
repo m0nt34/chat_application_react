@@ -7,7 +7,7 @@ const messageSchema = new mongoose.Schema({
     required: true,
   },
   content: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now },
+  time: { type: String },
 });
 
 const chatShema = new mongoose.Schema({
@@ -16,8 +16,6 @@ const chatShema = new mongoose.Schema({
   ],
   admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   private: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
   chatImg: { type: String, default: "" },
   messages: [messageSchema],
 });

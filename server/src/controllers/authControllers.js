@@ -7,7 +7,7 @@ import { storeOtp, getOtp } from "../utils/otpStore.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { generateHexCode } from "../utils/generateCode.js";
 import { passwordCheck } from "../utils/passwordCheck.js";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 export default {
   userExists: async (req, res) => {
     try {
@@ -176,8 +176,8 @@ export default {
     try {
       const accessToken = req.cookies.accessToken || req.header("accessToken");
       if (!accessToken) {
-        return res.status(401).json({ error:true });
-      } 
+        return res.status(401).json({ error: true });
+      }
 
       await jwt.verify(
         accessToken,
@@ -223,7 +223,7 @@ export default {
           error: true,
           message: "Email is required",
         });
-      }  
+      }
       const foundUser = await Users.findOne({ email });
       if (!foundUser) {
         return res.status(404).json({ error: true, message: "User not found" });
@@ -249,7 +249,7 @@ export default {
       await sendEmail(email, emailSubject, emailText, res);
       return res.status(200).json({
         error: false,
-      }); 
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -266,13 +266,12 @@ export default {
         process.env.LINK_TOKEN,
         (err, decoded) => {
           if (err) {
-  
             return res.status(401).json({ error: true, message: err });
           } else {
             return decoded;
           }
         }
-      ); 
+      );
 
       const userID = decoded.userID;
 
@@ -304,6 +303,42 @@ export default {
         return res.status(404).json({ error: true, message: "User not found" });
       }
       res.json({ error: false, message: "Password updated successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: true,
+        message: "Failed to update password",
+        error: error,
+      });
+    }
+  },
+  getUser: async (req, res) => {
+    try {
+      const token = req.cookies.accessToken || req.header("accessToken");
+
+      if (!token) {
+        return res
+          .status(401)
+          .json({ error: true, message: "no token provided" });
+      }
+      const decoded = await jwt.verify(
+        token,
+        process.env.ACCESS_TOKEN_SECRET,
+        (err, decoded) => {
+          if (err) {
+            return res.status(401).json({ error: true, message: err });
+          } else {
+            return decoded;
+          }
+        }
+      );
+      const user = await Users.findById(decoded.userID);
+      if (!user) {
+        return res
+          .status(401)
+          .json({ error: true, message: "no token provided" });
+      }
+      return res.json({ error: false, data: user });
     } catch (error) {
       console.error(error);
       res.status(500).json({

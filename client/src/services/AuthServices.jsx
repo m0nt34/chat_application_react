@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 export const checkIfuserExists = async (email) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/check/user", {
+    const res = await axios.post("http://localhost:3001/auth/check/user", {
       email,
     });
     return res.data;
@@ -19,7 +19,7 @@ export const checkIfuserExists = async (email) => {
 
 export const sendOtpEmail = async (email) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/send-email", {
+    const res = await axios.post("http://localhost:3001/auth/send-email", {
       email,
     });
     return res.data;
@@ -35,7 +35,7 @@ export const sendOtpEmail = async (email) => {
 
 export const checkOtpCode = async (email, otp) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/check/otp", {
+    const res = await axios.post("http://localhost:3001/auth/check/otp", {
       email,
       otp,
     });
@@ -52,7 +52,7 @@ export const checkOtpCode = async (email, otp) => {
 
 export const signUpService = async (data) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/signup", data);
+    const res = await axios.post("http://localhost:3001/auth/signup", data);
     return res.data;
   } catch (error) {
     return {
@@ -66,7 +66,7 @@ export const signUpService = async (data) => {
 
 export const signInService = async (data) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/login", data);
+    const res = await axios.post("http://localhost:3001/auth/login", data);
     return res.data;
   } catch (error) {
     return {
@@ -80,7 +80,7 @@ export const signInService = async (data) => {
 
 export const sendPasswordResetLink = async (email) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/send-link", {
+    const res = await axios.post("http://localhost:3001/auth/send-link", {
       email,
     });
     return res.data;
@@ -95,7 +95,7 @@ export const sendPasswordResetLink = async (email) => {
 };
 export const checkTokenLink = async (token) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/check/link", {
+    const res = await axios.post("http://localhost:3001/auth/check/link", {
       token,
     });
     return res.data;
@@ -108,7 +108,7 @@ export const checkTokenLink = async (token) => {
 };
 export const resetPassword = async (userID, password) => {
   try {
-    const res = await axios.patch("http://localhost:3000/auth/reset-password", {
+    const res = await axios.patch("http://localhost:3001/auth/reset-password", {
       userID,
       password,
     });
@@ -122,7 +122,7 @@ export const resetPassword = async (userID, password) => {
 };
 export const checkIfAuthenticated = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/auth/check");
+    const res = await axios.get("http://localhost:3001/auth/check");
     return res.data;
   } catch (error) {
     return {
@@ -131,3 +131,14 @@ export const checkIfAuthenticated = async () => {
     };
   }
 };
+export const getUserData = async()=>{
+  try {
+    const res = await axios.get("http://localhost:3001/auth/get-data");
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.message || "Failed to get user data",
+    };
+  }
+}

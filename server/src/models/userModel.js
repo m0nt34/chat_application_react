@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-});
+}, { versionKey: false });
 const Users = mongoose.model("user", userSchema, "users");
 
 export default Users;

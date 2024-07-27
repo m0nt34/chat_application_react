@@ -13,6 +13,7 @@ router.post("/check/otp",userController.checkOtp);
 router.post("/check/link",userController.checkLink);
 router.patch("/reset-password",userController.changePassword);
 router.get("/check", authenticate, userController.isLoggedIn);
+router.get("/get-data", authenticate, userController.getUser);
 
 export default router;
  
