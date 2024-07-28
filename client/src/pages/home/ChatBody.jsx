@@ -5,7 +5,7 @@ import { useUser } from "../../store/userStore";
 import { postMessage } from "../../services/chatServices";
 const ChatBody = ({ socket }) => {
   const [messageList, setMessageList] = useState([]);
-  const [curMessage, setFormData] = useState("");
+  const [curMessage, setCurMessage] = useState("");
   const { user } = useUser();
   const handleSumbim = async (e) => {
     e.preventDefault();
@@ -16,7 +16,7 @@ const ChatBody = ({ socket }) => {
       };
       await socket.emit("send_message", messageObj);
       setMessageList((prev) => [...prev, messageObj]);
-      setFormData("");
+      setCurMessage("");
     }
   };
   useEffect(() => {
@@ -35,7 +35,7 @@ const ChatBody = ({ socket }) => {
   };
   return (
     <div className="flex flex-col h-full">
-      <ul className="flex flex-col gap-5 h-[570px] px-5 pt-5 overflow-y-auto">
+      <ul className="flex flex-col gap-4 h-[570px] px-5 pt-5 overflow-y-auto">
         {messageList.map((mess, i) => (
           <li
             key={i}
@@ -49,7 +49,7 @@ const ChatBody = ({ socket }) => {
                   : "flex flex-wrap text-white text-xl bg-customColor-blue max-w-80 w-fit rounded-xl p-2 px-3 rounded-bl-sm"
               }
             >
-              {mess.message}
+              {mess.content}
             </span>
           </li>
         ))}
@@ -61,7 +61,7 @@ const ChatBody = ({ socket }) => {
               autoComplete="off"
               className="peer flex-1 bg-transparent text-white outline-none w-full placeholder-transparent text-2xl"
               onChange={(e) => {
-                setFormData(e.target.value);
+                setCurMessage(e.target.value);
               }}
               value={curMessage}
             />

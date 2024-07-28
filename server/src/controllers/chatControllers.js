@@ -69,4 +69,31 @@ export default {
       });
     }
   },
+  createChat: async (req, res) => {
+    try {
+      const { userIDs, privateChat, chatImg } = req.body;
+      if (!userIDs) {
+        return res.status(400).json({
+          error: true,
+          message: "to create chat participants are required",
+        });
+      }
+      const chatObj = {
+        participants: [userIDs],
+        admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+        private: privateChat,
+        chatImg: chatImg,
+      };
+      await new Chats(chatObj).save();
+      return res.status(200).json({
+        error: false,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: "Internal server error",
+        details: error.message,
+      });
+    }
+  },
 };

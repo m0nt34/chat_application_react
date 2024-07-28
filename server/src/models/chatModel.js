@@ -17,7 +17,10 @@ const chatShema = new mongoose.Schema({
   admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   private: { type: Boolean, default: false },
   chatImg: { type: String, default: "" },
-  messages: [messageSchema],
+  messages: {
+    type: [messageSchema],
+    default: [], 
+  },
 });
 
 const Chats = mongoose.model("chat", chatShema, "chats");

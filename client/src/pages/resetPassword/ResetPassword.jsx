@@ -14,7 +14,6 @@ const ResetPassword = () => {
 
   const sendNewPassword = async (token) => {
     const res = await checkTokenLink(token);
-    console.log(res);
     if (res.error && !errorShownRef.current) {
       showErrorMessage(res.message);
       console.log("error accoured here");

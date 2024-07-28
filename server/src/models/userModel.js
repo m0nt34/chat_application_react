@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     ref: "users",
     default: [],
   },
+  friendRequests: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "users",
+    default: [],
+  },
   chats: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "chats",
