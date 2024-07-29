@@ -8,7 +8,7 @@ const messageSchema = new mongoose.Schema({
   },
   content: { type: String, required: true },
   time: { type: String },
-});
+}, { versionKey: false });
 
 const chatShema = new mongoose.Schema({
   participants: [
@@ -21,7 +21,7 @@ const chatShema = new mongoose.Schema({
     type: [messageSchema],
     default: [], 
   },
-});
+}, { versionKey: false });
 
 const Chats = mongoose.model("chat", chatShema, "chats");
 

@@ -8,6 +8,7 @@ export const useUser = create((set) => ({
     email: null,
     password: null,
     friends: null,
+    friendRequests: [],
     chats: null,
     code: null,
     banned: null,
@@ -19,7 +20,7 @@ export const useUser = create((set) => ({
         ...state.user,
         [field]: value,
       },
-    })), 
+    })),
   fetchAndSetUser: async () => {
     const userData = await getUserData();
 

@@ -12,7 +12,6 @@ export default {
   userExists: async (req, res) => {
     try {
       const { email } = req.body;
-
       if (!email) {
         return res.status(400).json({
           error: true,
@@ -42,21 +41,22 @@ export default {
     try {
       const { email } = req.body;
       const otp = await generateOtp();
-      await storeOtp(email, otp);
+      storeOtp(email, otp);
+
       const emailSubject = "Account Confirmation OTP Code";
       const emailText = `
       Dear User,
-
+      
       Thank you for registering with our chat application.
-
+      
       To complete your account confirmation, please use the following OTP code:
-
+      
       ${otp}
-
+      
       If you did not attempt to register or create an account with our application, please disregard this email. 
-
+      
       If you have any questions or need assistance, do not hesitate to contact our support team.
-
+      
       Best regards,
       The Chat Application Team`;
       await sendEmail(email, emailSubject, emailText, res);
@@ -66,8 +66,8 @@ export default {
     } catch (error) {
       console.error(error);
       return res
-        .status(500)
-        .json({ error: true, message: "Error creating user", error: err });
+      .status(500)
+        .json({ error: true, message: "Error creating user", error: error });
     }
   },
   checkOtp: async (req, res) => {
@@ -102,9 +102,9 @@ export default {
     }
   },
   createUser: async (req, res) => {
+    
     try {
       const userInfo = req.body;
-
       const hashedPassword = await bcrypt.hash(userInfo.password, 10);
       userInfo.password = hashedPassword;
       const code = await generateHexCode();

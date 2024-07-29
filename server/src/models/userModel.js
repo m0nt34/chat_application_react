@@ -1,5 +1,29 @@
 import mongoose from "mongoose";
 
+const friendReqSchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  avatar: {
+    type: String,
+    default: "",
+  },
+  code: {
+    type: String,
+    required: true,
+  },
+}, { versionKey: false });
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -24,10 +48,9 @@ const userSchema = new mongoose.Schema({
     default: [],
   },
   friendRequests: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "users",
+    type: [friendReqSchema],
     default: [],
-  },
+  }, 
   chats: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "chats",
@@ -46,6 +69,7 @@ const userSchema = new mongoose.Schema({
     default: "",
   },
 }, { versionKey: false });
+
 const Users = mongoose.model("user", userSchema, "users");
 
 export default Users;
