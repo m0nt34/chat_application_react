@@ -9,6 +9,7 @@ router.post("/post-message", chatControllers.postMessage);
 router.post("/send-request", chatControllers.sendRequest);
 router.post("/decline-request", chatControllers.declineRequests);
 router.post("/accept-request", chatControllers.acceptRequests);
+
 router.get("/search-users", chatControllers.searchUsers);
 router.get("/get-messages", chatControllers.getMessages);
 

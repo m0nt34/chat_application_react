@@ -4,7 +4,7 @@ import userImg from "../../assets/images/user.jpg";
 import Xmark from "../../assets/icons/Xmark";
 import CheckMarkIcon from "../../assets/icons/CheckMarkIcon";
 import { useUser } from "../../store/userStore";
-import { declineRequest } from "../../services/chatServices";
+import { declineRequest,acceptRequest } from "../../services/chatServices";
 import { showErrorMessage } from "../../utils/validation";
 const FriendRequests = ({ setSearch }) => {
   const { user, fetchAndSetUser } = useUser();
@@ -14,7 +14,17 @@ const FriendRequests = ({ setSearch }) => {
   }, [user.friendRequests]);
   const handleReject = async (userID) => {
     const res = await declineRequest(user._id, userID);
-    console.log(1);
+    if (res.error) {
+      showErrorMessage(res.message);
+    } else {
+      setRequests((prevRequests) => {
+        return prevRequests.filter((req) => req._id !== userID);
+      });
+      fetchAndSetUser();
+    }
+  };
+  const handleAccept = async (userID) => {
+    const res = await acceptRequest(user._id, userID);
     if (res.error) {
       showErrorMessage(res.message);
     } else {
@@ -59,7 +69,12 @@ const FriendRequests = ({ setSearch }) => {
                   >
                     <Xmark className={"text-4xl text-red-600"} />
                   </button>
-                  <button className="flex items-center justify-center">
+                  <button
+                    onClick={() => {
+                      handleAccept(req._id);
+                    }}
+                    className="flex items-center justify-center"
+                  >
                     <CheckMarkIcon className={"text-4xl text-green-600"} />
                   </button>
                 </div>

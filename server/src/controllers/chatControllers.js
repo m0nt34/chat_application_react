@@ -1,5 +1,6 @@
 import Chats from "../models/chatModel.js";
 import Users from "../models/userModel.js";
+
 export default {
   postMessage: async (req, res) => {
     try {
@@ -71,7 +72,7 @@ export default {
   },
   createChat: async (req, res) => {
     try {
-      const { userIDs, privateChat, chatImg } = req.body;
+      const { name, userIDs, privateChat, chatImg, myID } = req.body;
       if (!userIDs) {
         return res.status(400).json({
           error: true,
@@ -79,11 +80,13 @@ export default {
         });
       }
       const chatObj = {
+        name: name,
         participants: [userIDs],
-        admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+        admins: [myID],
         private: privateChat,
         chatImg: chatImg,
       };
+
       await new Chats(chatObj).save();
       return res.status(200).json({
         error: false,
@@ -100,7 +103,7 @@ export default {
     try {
       const searchCode = req.query.searchCode;
       const currUser = req.query.currUser;
-      if (!searchCode || searchCode.length < 4||searchCode.length > 6) {
+      if (!searchCode || searchCode.length < 4 || searchCode.length > 6) {
         return res.status(400).json({
           error: true,
           message: "search word is required",
@@ -166,7 +169,7 @@ export default {
           isAlreadyRequested = true;
           break;
         }
-      } 
+      }
 
       if (isAlreadyRequested) {
         return res.status(400).json({
@@ -191,6 +194,23 @@ export default {
         return res.status(400).json({
           error: true,
           message: "Your friend already sent you request",
+        });
+      }
+      let isAlreadyFriend = false;
+
+      for (let i = 0; i < findCurrUser.friends.length; i++) {
+        if (
+          findCurrUser.friends[i]._id.toString() === findUser._id.toString()
+        ) {
+          isAlreadyFriend = true;
+          break;
+        }
+      }
+
+      if (isAlreadyFriend) {
+        return res.status(400).json({
+          error: true,
+          message: "This user is already your friend",
         });
       }
 
@@ -240,7 +260,7 @@ export default {
       const updatedFriendRequests = findCurrUser.friendRequests.filter(
         (req) => req._id.toString() !== userID
       );
-   
+
       findCurrUser.friendRequests = updatedFriendRequests;
 
       await findCurrUser.save();
@@ -260,11 +280,18 @@ export default {
   acceptRequests: async (req, res) => {
     try {
       const { myID, userID } = req.body;
-
       if (!myID || !userID) {
         return res.status(400).json({
           error: true,
           message: "User codes are required",
+        });
+      }
+
+      const findUser = await Users.findById(userID);
+      if (!findUser) {
+        return res.status(404).json({
+          error: true,
+          message: "No user was found",
         });
       }
 
@@ -279,16 +306,50 @@ export default {
       const updatedFriendRequests = findCurrUser.friendRequests.filter(
         (req) => req._id.toString() !== userID
       );
-   
       findCurrUser.friendRequests = updatedFriendRequests;
 
+      const myObj = {
+        _id: findCurrUser._id,
+        name: findCurrUser.name,
+        lastName: findCurrUser.lastName,
+        avatar: findCurrUser.avatar,
+      };
+      const friendsObj = {
+        _id: findUser._id,
+        name: findUser.name,
+        lastName: findUser.lastName,
+        avatar: findUser.avatar,
+      };
+
+      const privateChatObj = {
+        name: findCurrUser.name + "," + findUser.name,
+        participants: [findCurrUser._id, findUser._id],
+        admins: [findCurrUser._id, findUser._id],
+        private: true,
+      };
+
+      const newPrivateChat = await new Chats(privateChatObj).save();
+      const privateChatObj2 = {
+        _id: newPrivateChat._id,
+        name: findCurrUser.name + "," + findUser.name,
+        admins: [findCurrUser._id, findUser._id],
+        private: true,
+      };
+      findCurrUser.chats.push(privateChatObj2);
+      findUser.chats.push(privateChatObj2);
+
+      findUser.friends.push(myObj);
+      findCurrUser.friends.push(friendsObj);
+
+      await findUser.save();
       await findCurrUser.save();
 
       return res.status(200).json({
         error: false,
+        message: "Friend request accepted successfully",
       });
     } catch (error) {
-      console.log("Error in sendRequest function:", error);
+      console.log("Error in acceptRequests function:", error);
       return res.status(500).json({
         error: true,
         message: "Internal server error",
