@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ChatLeftSide from "./ChatLeftSide";
+import ChatLeftSide from "./leftSide/ChatLeftSide";
 import ChatRightSide from "./ChatRightSide";
 import io from "socket.io-client";
 import { useUser } from "../../store/userStore";

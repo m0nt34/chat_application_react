@@ -47,8 +47,9 @@ io.on("connection", (socket) => {
     if (callback) callback(`Left room ${roomId}`);
   });
 
-  socket.on("send_message", (data) => {
+  socket.on("send_message", (data,callback) => {
     socket.to(data.room).emit("receive_message", data);
+    if(callback)callback(data)
   });
 
   socket.on("disconnect", () => {
