@@ -10,7 +10,7 @@ const messageSchema = new mongoose.Schema(
     content: { type: String, required: true },
     time: { type: String },
   },
-  { versionKey: false }
+  { versionKey: false, _id: false }
 );
 
 const chatShema = new mongoose.Schema(

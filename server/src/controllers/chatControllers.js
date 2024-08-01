@@ -4,7 +4,7 @@ import Users from "../models/userModel.js";
 export default {
   postMessage: async (req, res) => {
     try {
-      const { chat, message } = req.body;
+      const { message } = req.body;
 
       if (!message.content) {
         return res.status(400).json({
@@ -13,7 +13,7 @@ export default {
         });
       }
 
-      const chatDoc = await Chats.findById(chat);
+      const chatDoc = await Chats.findById(message.room);
       if (!chatDoc) {
         return res.status(404).json({
           error: true,
@@ -36,7 +36,6 @@ export default {
 
       return res.status(200).json({
         error: false,
-        data: chatDoc,
       });
     } catch (error) {
       return res.status(500).json({
@@ -48,7 +47,7 @@ export default {
   },
   getMessages: async (req, res) => {
     try {
-      const { chatId } = req.params;
+      const { chatId } = req.query;
 
       const chatDoc = await Chats.findById(chatId);
       if (!chatDoc) {
@@ -72,7 +71,7 @@ export default {
   },
   createChat: async (req, res) => {
     try {
-      const { name, userIDs, privateChat, chatImg, myID } = req.body;
+      const { name, userIDs, myID } = req.body;
       if (!userIDs) {
         return res.status(400).json({
           error: true,
@@ -81,17 +80,25 @@ export default {
       }
       const chatObj = {
         name: name,
-        participants: [userIDs],
+        participants: [userIDs, myID],
         admins: [myID],
-        private: privateChat,
-        chatImg: chatImg,
+        private: false,
       };
-
-      await new Chats(chatObj).save();
+      console.log(chatObj.participants);
+      const newChat = await new Chats(chatObj).save();
+  
+      const createdChatObj = {
+        _id: newChat._id,
+        name,
+        admins: [myID],
+        private: false,
+      };
+      
       return res.status(200).json({
         error: false,
       });
     } catch (error) {
+      //console.log(error);
       return res.status(500).json({
         error: true,
         message: "Internal server error",

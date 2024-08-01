@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 
 import WinkFaceIcon from "../../assets/icons/WinkFaceIcon";
 import { useUser } from "../../store/userStore";
-import { postMessage } from "../../services/chatServices";
+import { postMessage, getMessages } from "../../services/chatServices";
 import { useRoom } from "../../store/currentRomm";
-
+import { showErrorMessage } from "../../utils/validation";
 const ChatBody = ({ socket }) => {
   const [messageList, setMessageList] = useState([]);
   const [curMessage, setCurMessage] = useState("");
@@ -12,17 +12,18 @@ const ChatBody = ({ socket }) => {
   const { room } = useRoom();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const messageObj = {
+      sender: user._id,
+      content: curMessage,
+      room: room._id,
+    };
     if (curMessage !== "") {
-      const messageObj = {
-        sender: user._id,
-        content: curMessage,
-        room: room,
-      };
-      await socket.emit("send_message", messageObj, (res) => {
-   
-      });
+      await socket.emit("send_message", messageObj, (res) => {});
       setMessageList((prev) => [...prev, messageObj]);
+
       setCurMessage("");
+
+      await postMessage(messageObj);
     }
   };
 
@@ -37,7 +38,18 @@ const ChatBody = ({ socket }) => {
     };
   }, [socket]);
   useEffect(() => {
-    setMessageList([]);
+    const fetchMessages = async () => {
+      const res = await getMessages(room._id);
+      if (!res.error) {
+        setMessageList(res.data);
+      } else {
+        console.log(res.message);
+      }
+    };
+
+    if (room) {
+      fetchMessages();
+    }
   }, [room]);
   const myMessage = (id) => {
     return user ? user._id === id : false;

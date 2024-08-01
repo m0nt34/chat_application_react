@@ -5,8 +5,10 @@ import PlusIcon from "../../../assets/icons/PlusIcon";
 import { useUser } from "../../../store/userStore";
 import Input from "../../../components/UI/Input";
 import { useChatSearch } from "../../../store/chatSearch";
+import { useCreateChatPopup } from "../../../store/createChatPopup";
 const LeftSideHeader = ({ userImg }) => {
   const { setChatSearch } = useChatSearch();
+  const { setPopupToTrue } = useCreateChatPopup();
   const { user } = useUser();
   const handleChange = (e) => {
     const { value } = e.target;
@@ -33,7 +35,10 @@ const LeftSideHeader = ({ userImg }) => {
           Icon={SearchIcon}
           onChange={handleChange}
         />
-        <button className="flex items-center justify-center text-5xl text-white bg-[#374151] rounded-lg h-full aspect-square hover:opacity-85 transition">
+        <button
+          onClick={setPopupToTrue}
+          className="flex items-center justify-center text-5xl text-white bg-[#374151] rounded-lg h-full aspect-square hover:opacity-85 transition"
+        >
           <PlusIcon />
         </button>
       </div>

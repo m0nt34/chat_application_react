@@ -1,9 +1,9 @@
 import axios from "axios";
 
-export const postMessage = async (chat, message) => {
+export const postMessage = async (message) => {
+
   try {
     const res = await axios.post("http://localhost:3001/post-message", {
-      chat,
       message,
     });
     return res.data;
@@ -11,6 +11,20 @@ export const postMessage = async (chat, message) => {
     return {
       error: true,
       message: error.response?.data?.message || "Failed to post message.",
+    };
+  }
+};
+export const getMessages = async (id) => {
+  
+  try {
+    const res = await axios.get(
+      `http://localhost:3001/get-messages?chatId=${id}`
+    );
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.message || "Failed to get messages.",
     };
   }
 };
@@ -25,22 +39,21 @@ export const createPrivateChat = async (userIDs, chatImg) => {
   } catch (error) {
     return {
       error: true,
-      message: error.response?.data?.message || "Failed to post message.",
+      message: error.response?.data?.message || "Failed to create chat.",
     };
   }
 };
-export const createChat = async (userIDs, chatImg) => {
+export const createChat = async (name, userIDs, myID) => {
+  
   try {
     const res = await axios.post("http://localhost:3001/create-chat", {
-      userIDs,
-      privateChat: false,
-      chatImg,
+      name, userIDs, myID
     });
     return res.data;
   } catch (error) {
     return {
       error: true,
-      message: error.response?.data?.message || "Failed to post message.",
+      message: error.response?.data?.message || "Failed to create chat.",
     };
   }
 };
