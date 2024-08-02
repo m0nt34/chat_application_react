@@ -28,26 +28,13 @@ export const getMessages = async (id) => {
     };
   }
 };
-export const createPrivateChat = async (userIDs, chatImg) => {
+
+export const createChat = async (name, userIDs, myObj) => {
   try {
     const res = await axios.post("http://localhost:3001/create-chat", {
+      name,
       userIDs,
-      privateChat: true,
-      chatImg,
-    });
-    return res.data;
-  } catch (error) {
-    return {
-      error: true,
-      message: error.response?.data?.message || "Failed to create chat.",
-    };
-  }
-};
-export const createChat = async (name, userIDs, myID) => {
-  
-  try {
-    const res = await axios.post("http://localhost:3001/create-chat", {
-      name, userIDs, myID
+      myObj,
     });
     return res.data;
   } catch (error) {

@@ -68,37 +68,59 @@ export default {
         details: error.message,
       });
     }
-  },
+  }, 
   createChat: async (req, res) => {
     try {
-      const { name, userIDs, myID } = req.body;
-      if (!userIDs) {
+      const { name, userIDs, myObj } = req.body;
+
+
+      if(name.length<3){
+        return res.status(400).json({
+          error:true,
+          message:"chat name should be longer"
+        })
+      }
+      if(name.length>20){
+        return res.status(400).json({
+          error:true,
+          message:"chat name should be shorter"
+        })
+      }
+
+      if (userIDs.length<2) {
         return res.status(400).json({
           error: true,
-          message: "to create chat participants are required",
+          message: "To create chat you need at least 2 other users",
         });
-      }
+      } 
+      const allParticipants = [...userIDs, myObj]; 
+
       const chatObj = {
         name: name,
-        participants: [userIDs, myID],
-        admins: [myID],
+        participants:allParticipants ,
+        admins: [myObj._id],
         private: false,
       };
-      console.log(chatObj.participants);
       const newChat = await new Chats(chatObj).save();
-  
+
       const createdChatObj = {
         _id: newChat._id,
         name,
-        admins: [myID],
+        admins: [myObj._id],
         private: false,
       };
-      
+      const userUpdatePromises = allParticipants.map(userID =>
+        Users.findByIdAndUpdate(userID, { $push: { chats: createdChatObj } }, { new: true })
+      );
+  
+
+      await Promise.all(userUpdatePromises);
+  
       return res.status(200).json({
         error: false,
       });
     } catch (error) {
-      //console.log(error);
+      console.log(error);
       return res.status(500).json({
         error: true,
         message: "Internal server error",

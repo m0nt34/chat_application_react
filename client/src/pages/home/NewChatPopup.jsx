@@ -14,12 +14,18 @@ const NewChatPopup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await createChat(chatName, addedUsers, user._id);
+    const currUserObj = {
+      _id: user._id,
+      name: user.name,
+      lastName: user.lastName,
+      avatar: user.avatar,
+    };
+    const res = await createChat(chatName, addedUsers, currUserObj);
     console.log(res);
-    if(res.error){
-      showErrorMessage(res.message)
-    }else{
-      showSuccessMessage("New chat was created successfully")
+    if (res.error) {
+      showErrorMessage(res.message);
+    } else {
+      showSuccessMessage("New chat was created successfully");
       setPopupToFalse();
     }
   };

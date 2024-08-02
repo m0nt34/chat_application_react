@@ -13,3 +13,4 @@ router.post("/accept-request", chatControllers.acceptRequests);
 router.get("/search-users", chatControllers.searchUsers);
 router.get("/get-messages", chatControllers.getMessages);
 export default router;
+ 

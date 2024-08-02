@@ -1,6 +1,8 @@
-.users-box{
+/* Styling for users-box scrollbars */
+.users-box {
   overflow-y: auto;
 }
+
 .users-box::-webkit-scrollbar {
   width: 12px;
 }
@@ -12,5 +14,60 @@
 
 .users-box::-webkit-scrollbar-thumb {
   background-color: #374151;
+  border-radius: 4px;
+}
+
+/* Styling for message-box scrollbars */
+.message-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 570px;
+  padding: 1.25rem 1.25rem 0 1.25rem;
+  overflow-y: auto;
+}
+
+.message-box::-webkit-scrollbar {
+  width: 15px; 
+}
+
+.message-box::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: 4px;
+}
+
+.message-box::-webkit-scrollbar-thumb {
+  background-color: #374151;
+  border-radius: 4px;
+}
+.emj-box{
+  display: flex;
+
+
+  flex-wrap: wrap;
+  overflow-y: auto;
+  position: absolute;
+  bottom: 4rem;
+  right: 50%;
+  transform: translateX(50%);
+  height: 13rem;
+  width: 14rem;
+  aspect-ratio: 1/1;
+  background-color:  rgb(51 65 85 / var(--tw-bg-opacity));
+  border-radius: 8px;
+  padding:8px;
+  
+}
+.emj-box::-webkit-scrollbar {
+  width: 15px; 
+}
+
+.emj-box::-webkit-scrollbar-track {
+
+  border-radius: 4px;
+}
+
+.emj-box::-webkit-scrollbar-thumb {
+  background-color: #61718b;
   border-radius: 4px;
 }

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-
-import WinkFaceIcon from "../../assets/icons/WinkFaceIcon";
 import { useUser } from "../../store/userStore";
 import { postMessage, getMessages } from "../../services/chatServices";
 import { useRoom } from "../../store/currentRomm";
-import { showErrorMessage } from "../../utils/validation";
+import Emojis from "./Emojis";
 const ChatBody = ({ socket }) => {
   const [messageList, setMessageList] = useState([]);
   const [curMessage, setCurMessage] = useState("");
@@ -57,7 +55,7 @@ const ChatBody = ({ socket }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <ul className="flex flex-col gap-4 h-[570px] px-5 pt-5 overflow-y-auto">
+      <ul className="message-box">
         {messageList.map((mess, i) => (
           <li
             key={i}
@@ -88,9 +86,8 @@ const ChatBody = ({ socket }) => {
               value={curMessage}
             />
           </div>
-          <button type="button">
-            <WinkFaceIcon />
-          </button>
+          <Emojis setCurMessage={setCurMessage} curMessage={curMessage}/>
+          
         </div>
         <button
           type="submit"
