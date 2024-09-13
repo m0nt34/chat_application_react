@@ -11,11 +11,6 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
-
 app.use(configs);
 app.use("/", routes);
 
@@ -29,10 +24,8 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  //console.log(`Socket connected: ${socket.id}`);
 
   socket.on("user_connected", (userId, callback) => {
-    //console.log(`User connected: ${userId}`);
     socket.userId = userId;
     if (callback) callback('User connected successfully');
   });
@@ -53,7 +46,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    //console.log(`User disconnected: ${socket.userId}`);
+    
   });
 });
  

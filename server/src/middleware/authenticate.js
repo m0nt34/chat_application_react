@@ -10,22 +10,30 @@ const authenticate = async (req, res, next) => {
         message: "No entry without auth",
       });
     }
-    await refreshAccessToken(req, res, refreshToken);
-    next();
+    const newAccessToken = await refreshAccessToken(req, res, refreshToken);
+
+    if (newAccessToken) {
+      res.locals.accessToken = newAccessToken;
+      next();
+    }
   } else {
-    jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) {
-        if (err.name === "TokenExpiredError" && refreshToken) {
-          refreshAccessToken(req, res, refreshToken);
-          next();
+    await jwt.verify(
+      accessToken,
+      process.env.ACCESS_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err) {
+          if (err.name === "TokenExpiredError" && refreshToken) {
+            refreshAccessToken(req, res, refreshToken);
+            next();
+          } else {
+            return res.status(403).json({ message: "Invalid access token" });
+          }
         } else {
-          return res.status(403).json({ message: "Invalid access token" });
+          next();
         }
-      } else {
-        next();
       }
-    });
+    );
   }
 };
 
-export  { authenticate };
+export { authenticate };

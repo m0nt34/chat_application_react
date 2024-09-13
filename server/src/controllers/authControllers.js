@@ -66,7 +66,7 @@ export default {
     } catch (error) {
       console.error(error);
       return res
-      .status(500)
+        .status(500)
         .json({ error: true, message: "Error creating user", error: error });
     }
   },
@@ -102,7 +102,6 @@ export default {
     }
   },
   createUser: async (req, res) => {
-    
     try {
       const userInfo = req.body;
       const hashedPassword = await bcrypt.hash(userInfo.password, 10);
@@ -174,7 +173,11 @@ export default {
 
   isLoggedIn: async (req, res) => {
     try {
-      const accessToken = req.cookies.accessToken || req.header("accessToken");
+      const accessToken =
+        res.locals.accessToken ||
+        req.cookies.accessToken ||
+        req.header("accessToken");
+
       if (!accessToken) {
         return res.status(401).json({ error: true });
       }
@@ -347,5 +350,11 @@ export default {
         error: error,
       });
     }
+  },
+  logout: async (req, res) => {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+
+    return res.status(200).json({ message: "Logout successful" });
   },
 };

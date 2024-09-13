@@ -10,6 +10,7 @@ export default function AuthRequired() {
 
   const checkIfAuthFunc = async () => {
     const res = await checkIfAuthenticated();
+
     if (res.error) {
       authToF();
     } else {

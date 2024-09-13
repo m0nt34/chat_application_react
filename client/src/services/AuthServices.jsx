@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 export const checkIfuserExists = async (email) => {
   try {
@@ -131,7 +130,7 @@ export const checkIfAuthenticated = async () => {
     };
   }
 };
-export const getUserData = async()=>{
+export const getUserData = async () => {
   try {
     const res = await axios.get("http://localhost:3001/auth/get-data");
     return res.data;
@@ -141,4 +140,14 @@ export const getUserData = async()=>{
       message: error.response?.data?.message || "Failed to get user data",
     };
   }
-}
+};
+export const logOut = async () => {
+  try {
+    await axios.get("http://localhost:3001/auth/logout");
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.message || "Failed to log out",
+    };
+  }
+};

@@ -3,10 +3,11 @@ import { useUser } from "../../../store/userStore";
 import { useRoom } from "../../../store/currentRomm";
 import usersImg from "../../../assets/images/chatDefault.jpg";
 import userImg from "../../../assets/images/user.jpg";
+import { useChatSearch } from "../../../store/chatSearch";
 const ChatLists = ({ socket }) => {
   const [chats, setChats] = useState([]);
+  const { chatSearch } = useChatSearch();
   const isFirstLoad = useRef(true);
-
   const { user } = useUser();
   const { setRoom } = useRoom();
   const joinRoom = (chat) => {
@@ -16,17 +17,17 @@ const ChatLists = ({ socket }) => {
   };
 
   useEffect(() => {
-    if (user.chats && Array.isArray(user.chats)) {
+    if (!user?.chats) return;
+    if (chatSearch.trim() === "") {
       setChats(user.chats);
+    } else {
+      const filteredChats = user.chats.filter(
+        (chat) =>
+          chat.name.startsWith(chatSearch) || chat.name.includes(chatSearch)
+      );
+      setChats(filteredChats);
     }
-  }, [user.chats]);
-
-  useEffect(() => {
-    if (isFirstLoad.current && chats && chats.length > 0) {
-      joinRoom(chats[0]);
-      isFirstLoad.current = false;
-    }
-  }, [chats]);
+  }, [chatSearch, user?.chats]);
   return (
     <ul className="flex flex-col gap-4 pr-5">
       {chats.map((chat) => {

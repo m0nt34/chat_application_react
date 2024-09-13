@@ -1,7 +1,17 @@
 import { create } from "zustand";
-
-export const useAuth = create((set) => ({
-  auth: false,
-  authToT: () => set({ auth: true }),
-  authToF: () => set({ auth: false }),
-}));
+import { persist } from "zustand/middleware";
+export const useAuth = create(
+  persist(
+    (set) => ({
+      auth: false,
+      authToT: () => set({ auth: true }),
+      authToF: () => {
+        set({ auth: false });
+        localStorage.clear();
+      },
+    }),
+    {
+      name: "userLoginStatus",
+    }
+  )
+);

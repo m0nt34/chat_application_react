@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUser } from "../../store/userStore";
 import { postMessage, getMessages } from "../../services/chatServices";
 import { useRoom } from "../../store/currentRomm";
 import Emojis from "./Emojis";
+
 const ChatBody = ({ socket }) => {
   const [messageList, setMessageList] = useState([]);
   const [curMessage, setCurMessage] = useState("");
   const { user } = useUser();
   const { room } = useRoom();
+  const messagesEndRef = useRef(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const messageObj = {
       sender: user._id,
-      content: curMessage,
+      content: curMessage.trim(),
       room: room._id,
     };
-    if (curMessage !== "") {
+    if (curMessage.trim() !== "") {
       await socket.emit("send_message", messageObj, (res) => {});
       setMessageList((prev) => [...prev, messageObj]);
 
@@ -35,6 +38,7 @@ const ChatBody = ({ socket }) => {
       socket.off("receive_message", handleMessageReceive);
     };
   }, [socket]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       const res = await getMessages(room._id);
@@ -49,30 +53,48 @@ const ChatBody = ({ socket }) => {
       fetchMessages();
     }
   }, [room]);
+
   const myMessage = (id) => {
     return user ? user._id === id : false;
   };
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView();
+  }, [messageList]);
+
   return (
     <div className="flex flex-col h-full">
       <ul className="message-box">
-        {messageList.map((mess, i) => (
-          <li
-            key={i}
-            className={myMessage(mess.sender) ? "flex justify-end" : "flex"}
-            style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
-          >
-            <span
-              className={
-                myMessage(mess.sender)
-                  ? "flex flex-wrap text-white text-xl bg-[#525e72] max-w-80 w-fit rounded-xl p-2 px-3 rounded-br-sm"
-                  : "flex flex-wrap text-white text-xl bg-customColor-blue max-w-80 w-fit rounded-xl p-2 px-3 rounded-bl-sm"
-              }
+        {messageList.map((mess, i) => {
+          let mymessage = myMessage(mess.sender);
+          return (
+            <li
+              key={i}
+              className={mymessage ? "flex justify-end" : "flex justify-start"}
+              style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
             >
-              {mess.content}
-            </span>
-          </li>
-        ))}
+              <div className="flex flex-col max-w-80 w-fit">
+                <p
+                  className={`flex w-full text-[12px] mb-[2px] text-[#ccc] ${
+                    mymessage ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {mess.time}
+                </p>
+                <span
+                  className={
+                    mymessage
+                      ? "text-white text-xl bg-customColor-blue rounded-xl p-2 px-3 rounded-br-sm"
+                      : "text-white text-xl bg-[#525e72] rounded-xl p-2 px-3 rounded-bl-sm"
+                  }
+                >
+                  {mess.content}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+        <div ref={messagesEndRef} />
       </ul>
       <form className="flex gap-8 p-5" onSubmit={handleSubmit}>
         <div className="flex w-full gap-5">
@@ -86,8 +108,7 @@ const ChatBody = ({ socket }) => {
               value={curMessage}
             />
           </div>
-          <Emojis setCurMessage={setCurMessage} curMessage={curMessage}/>
-          
+          <Emojis setCurMessage={setCurMessage} curMessage={curMessage} />
         </div>
         <button
           type="submit"

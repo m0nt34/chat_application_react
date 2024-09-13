@@ -15,6 +15,7 @@ router.patch("/reset-password",userController.changePassword);
 router.get("/check", authenticate, userController.isLoggedIn);
 router.get("/get-data", authenticate, userController.getUser);
 
+router.get("/logout",userController.logout);
 
 export default router;
   

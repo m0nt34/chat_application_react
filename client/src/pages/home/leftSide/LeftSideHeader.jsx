@@ -6,6 +6,7 @@ import { useUser } from "../../../store/userStore";
 import Input from "../../../components/UI/Input";
 import { useChatSearch } from "../../../store/chatSearch";
 import { useCreateChatPopup } from "../../../store/createChatPopup";
+import UserIdInfo from "./UserIdInfo";
 const LeftSideHeader = ({ userImg }) => {
   const { setChatSearch } = useChatSearch();
   const { setPopupToTrue } = useCreateChatPopup();
@@ -23,9 +24,7 @@ const LeftSideHeader = ({ userImg }) => {
             {user.name + " " + user.lastName}
           </h1>
         </div>
-        <button className="cursor-pointer">
-          <ThreeDots />
-        </button>
+        <UserIdInfo/>
       </div>
       <div className="flex gap-3 items-center justify-center">
         <Input

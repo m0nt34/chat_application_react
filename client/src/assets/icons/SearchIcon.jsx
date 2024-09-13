@@ -7,7 +7,7 @@ const SearchIcon = () => {
       width="1.5em"
       height="1.5em"
       viewBox="0 0 15 15"
-      className="text-[#afb2b6]"
+      className="text-[#afb2b6] "
     >
       <path
         fill="none"
