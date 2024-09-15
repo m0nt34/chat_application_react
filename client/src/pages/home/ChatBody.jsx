@@ -11,6 +11,7 @@ const ChatBody = ({ socket }) => {
   const { room } = useRoom();
   const messagesEndRef = useRef(null);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const messageObj = {
@@ -48,7 +49,6 @@ const ChatBody = ({ socket }) => {
         console.log(res.message);
       }
     };
-
     if (room) {
       fetchMessages();
     }
@@ -74,13 +74,6 @@ const ChatBody = ({ socket }) => {
               style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
             >
               <div className="flex flex-col max-w-80 w-fit">
-                <p
-                  className={`flex w-full text-[12px] mb-[2px] text-[#ccc] ${
-                    mymessage ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  {mess.time}
-                </p>
                 <span
                   className={
                     mymessage
@@ -90,6 +83,13 @@ const ChatBody = ({ socket }) => {
                 >
                   {mess.content}
                 </span>
+                <p
+                  className={`flex w-full text-[12px] mt-[2px] text-[#ccc] ${
+                    mymessage ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {mess.time}
+                </p>
               </div>
             </li>
           );

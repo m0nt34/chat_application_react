@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const postMessage = async (message) => {
-
   try {
     const res = await axios.post("http://localhost:3001/post-message", {
       message,
@@ -15,7 +14,6 @@ export const postMessage = async (message) => {
   }
 };
 export const getMessages = async (id) => {
-  
   try {
     const res = await axios.get(
       `http://localhost:3001/get-messages?chatId=${id}`
@@ -97,6 +95,19 @@ export const acceptRequest = async (myID, userID) => {
     return {
       error: true,
       message: error.response?.data?.message || "Failed to accept request.",
+    };
+  }
+};
+export const getChatByID = async (roomID) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:3001/get-chat?chatID=${roomID}`
+    );
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.message || "Failed get chat.",
     };
   }
 };

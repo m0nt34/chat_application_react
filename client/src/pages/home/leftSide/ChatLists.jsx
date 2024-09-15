@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useUser } from "../../../store/userStore";
 import { useRoom } from "../../../store/currentRomm";
-import usersImg from "../../../assets/images/chatDefault.jpg";
-import userImg from "../../../assets/images/user.jpg";
 import { useChatSearch } from "../../../store/chatSearch";
+import AvatarImg from "../AvatarImg";
 const ChatLists = ({ socket }) => {
   const [chats, setChats] = useState([]);
   const { chatSearch } = useChatSearch();
-  const isFirstLoad = useRef(true);
   const { user } = useUser();
   const { setRoom } = useRoom();
   const joinRoom = (chat) => {
@@ -16,6 +14,12 @@ const ChatLists = ({ socket }) => {
     });
   };
 
+  useEffect(() => {
+    if (!user?.chats) return;
+    if (user.chats[0]) {
+      setRoom(user.chats[0]);
+    }
+  }, [user?.chats]);
   useEffect(() => {
     if (!user?.chats) return;
     if (chatSearch.trim() === "") {
@@ -39,11 +43,7 @@ const ChatLists = ({ socket }) => {
             key={chat._id}
             className="flex gap-5 items-center justify-start w-full rounded-xl bg-[#374151] p-3 cursor-pointer hover:bg-[#313b49] transition"
           >
-            <img
-              src={chat.private ? userImg : usersImg}
-              alt=""
-              className="rounded-full h-12"
-            />
+            <AvatarImg prv={chat.private} className="h-12" />
             <h1 className="text-xl text-white">{chat.name}</h1>
           </li>
         );

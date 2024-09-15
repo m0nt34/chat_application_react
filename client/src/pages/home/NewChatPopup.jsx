@@ -158,16 +158,16 @@ const NewChatPopup = () => {
             )}
             <div className="flex gap-3 mt-5">
               <button
-                type="submit"
-                className="bg-customColor-blue hover:opacity-85 transition text-white px-4 py-2 text-lg rounded-md w-full"
-              >
-                Create
-              </button>
-              <button
                 onClick={handleCancel}
                 className=" text-white hover:opacity-85 transition bg-[rgba(255,255,255,0.1)] px-4 py-2 text-lg rounded-md w-full"
               >
                 Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-customColor-blue hover:opacity-85 transition text-white px-4 py-2 text-lg rounded-md w-full"
+              >
+                Create
               </button>
             </div>
           </form>

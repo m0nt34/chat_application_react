@@ -68,36 +68,35 @@ export default {
         details: error.message,
       });
     }
-  }, 
+  },
   createChat: async (req, res) => {
     try {
       const { name, userIDs, myObj } = req.body;
 
-
-      if(name.length<3){
+      if (name.length < 3) {
         return res.status(400).json({
-          error:true,
-          message:"chat name should be longer"
-        })
+          error: true,
+          message: "chat name should be longer",
+        });
       }
-      if(name.length>20){
+      if (name.length > 20) {
         return res.status(400).json({
-          error:true,
-          message:"chat name should be shorter"
-        })
+          error: true,
+          message: "chat name should be shorter",
+        });
       }
 
-      if (userIDs.length<2) {
+      if (userIDs.length < 2) {
         return res.status(400).json({
           error: true,
           message: "To create chat you need at least 2 other users",
         });
-      } 
-      const allParticipants = [...userIDs, myObj]; 
+      }
+      const allParticipants = [...userIDs, myObj];
 
       const chatObj = {
         name: name,
-        participants:allParticipants ,
+        participants: allParticipants,
         admins: [myObj._id],
         private: false,
       };
@@ -109,13 +108,16 @@ export default {
         admins: [myObj._id],
         private: false,
       };
-      const userUpdatePromises = allParticipants.map(userID =>
-        Users.findByIdAndUpdate(userID, { $push: { chats: createdChatObj } }, { new: true })
+      const userUpdatePromises = allParticipants.map((userID) =>
+        Users.findByIdAndUpdate(
+          userID,
+          { $push: { chats: createdChatObj } },
+          { new: true }
+        )
       );
-  
 
       await Promise.all(userUpdatePromises);
-  
+
       return res.status(200).json({
         error: false,
       });
@@ -379,6 +381,37 @@ export default {
       });
     } catch (error) {
       console.log("Error in acceptRequests function:", error);
+      return res.status(500).json({
+        error: true,
+        message: "Internal server error",
+        details: error.message,
+      });
+    }
+  },
+  getChat: async (req, res) => {
+    try {
+      const { chatID } = req.query;
+      const currentChat = await Chats.findById(chatID).select(
+        "name participants admins private"
+      );
+      if (!currentChat) {
+        return res.status(404).json({
+          error: true,
+          message: "chat not found",
+        });
+      }
+
+      const neededFields = await currentChat.populate({
+        path: "participants admins",
+        select: "name lastName email",
+      });
+
+      return res.status(200).json({
+        error: false,
+        data: neededFields,
+      });
+    } catch (error) {
+      console.log("Error in sendRequest function:", error);
       return res.status(500).json({
         error: true,
         message: "Internal server error",
