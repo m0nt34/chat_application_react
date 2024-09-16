@@ -6,6 +6,7 @@ import AvatarImg from "./AvatarImg";
 import Input from "../../components/UI/Input";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import { useUser } from "../../store/userStore";
+import { filterValidation } from "../../utils/validation";
 const ChatSettingPopup = () => {
   const { isOpen, setPopupToFalse } = useChatSettingsPopup();
   const { room } = useRoom();
@@ -24,12 +25,8 @@ const ChatSettingPopup = () => {
       setRoomPrts(currentRoom.participants);
     } else {
       setRoomPrts((prev) => {
-        return currentRoom.participants.filter(
-          (prt) =>
-            String(prt.name+" "+prt.lastName).startsWith(searchWord.trim())||
-            String(prt.name+" "+prt.lastName).includes(searchWord.trim())||
-            prt.email.startsWith(searchWord.trim()) ||
-            prt.email.includes(searchWord.trim())
+        return currentRoom.participants.filter((prt) =>
+          filterValidation(prt, searchWord)
         );
       });
     }
@@ -46,6 +43,9 @@ const ChatSettingPopup = () => {
       name: room.name,
     }));
     const getChatFunc = async () => {
+
+      if (!room._id) return;
+
       const res = await getChatByID(room._id);
       if (!res.error) {
         setCurrentRoom(res.data);

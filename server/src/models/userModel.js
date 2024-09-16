@@ -4,7 +4,7 @@ const friendReqSchema = new mongoose.Schema(
   {
     _id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "user",
       required: true,
     },
     name: {
@@ -31,7 +31,7 @@ const friendSchema = new mongoose.Schema(
   {
     _id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "user",
       required: true,
     },
     name: {
@@ -45,28 +45,6 @@ const friendSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default: "",
-    },
-  },
-  { versionKey: false }
-);
-const privateChatSchema = new mongoose.Schema(
-  {
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "chats",
-      required: true,
-    },
-    name: {
-      type: String,
-      default: "chat name",
-    },
-    admins: {
-      type: Array,
-      required: true,
-    },
-    private: {
-      type: Boolean,
-      default: true,
     },
   },
   { versionKey: false }
@@ -100,7 +78,7 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
     chats: {
-      type: [privateChatSchema],
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "chat" }],
       default: [],
     },
     code: {
@@ -117,8 +95,8 @@ const userSchema = new mongoose.Schema(
     },
   },
   { versionKey: false }
-);
+); 
 
-const Users = mongoose.model("users", userSchema, "users"); 
+const Users = mongoose.model("user", userSchema, "users");
 
 export default Users;

@@ -4,7 +4,7 @@ const messageSchema = new mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "user",
       required: true,
     },
     content: { type: String, required: true },
@@ -19,9 +19,9 @@ const chatShema = new mongoose.Schema(
       type: String,
     },
     participants: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
+      { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     ],
-    admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+    admins: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     private: { type: Boolean, default: false },
     chatImg: { type: String, default: "" },
     messages: {

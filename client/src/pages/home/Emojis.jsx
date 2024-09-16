@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import WinkFaceIcon from "../../assets/icons/WinkFaceIcon";
 import { emojs } from "../../data/emojisData";
+import { useEmojis } from "../../store/emojisContainer";
 const Emojis = ({ setCurMessage, curMessage }) => {
-  const [show, setShow] = useState(false);
-
+  const {isOpen,setEmojisToOp} = useEmojis()
   const setEmoji = (emj) => {
     setCurMessage(curMessage + emj);
   };
   return (
     <div className="flex relative">
-      {show && (
+      {isOpen && (
         <div className="emj-box">
           {emojs.map((moj, i) => {
             return (
@@ -27,7 +27,7 @@ const Emojis = ({ setCurMessage, curMessage }) => {
           })}
         </div>
       )}
-      <button type="button" onClick={() => setShow(!show)}>
+      <button type="button" onClick={setEmojisToOp}>
         <WinkFaceIcon />
       </button>
     </div>

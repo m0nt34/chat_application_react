@@ -15,3 +15,4 @@ router.get("/get-messages", authenticate, chatControllers.getMessages);
 router.get("/get-chat", authenticate, chatControllers.getChat);
 
 export default router;
+ 

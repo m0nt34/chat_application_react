@@ -7,7 +7,7 @@ router.post("/signup", userController.createUser);
 router.post("/login", userController.loginUser);
 router.post("/send-email",userController.sendOtpEmail);
 router.post("/send-link",userController.sendLink);
-
+ 
 router.post("/check/user", userController.userExists);
 router.post("/check/otp",userController.checkOtp);
 router.post("/check/link",userController.checkLink);

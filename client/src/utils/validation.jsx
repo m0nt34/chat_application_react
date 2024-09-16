@@ -17,3 +17,10 @@ export const showErrorMessage = (message) => {
 export const showSuccessMessage = (message) => {
   toast.success(message);
 };
+
+export const filterValidation = (prt, searchWord)=>{
+  return String(prt.name+" "+prt.lastName).startsWith(searchWord.trim())||
+  String(prt.name+" "+prt.lastName).includes(searchWord.trim())||
+  prt.email.startsWith(searchWord.trim()) ||
+  prt.email.includes(searchWord.trim())
+}

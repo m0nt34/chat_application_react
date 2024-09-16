@@ -17,6 +17,7 @@ const ChatLists = ({ socket }) => {
   useEffect(() => {
     if (!user?.chats) return;
     if (user.chats[0]) {
+      joinRoom(user.chats[0])
       setRoom(user.chats[0]);
     }
   }, [user?.chats]);

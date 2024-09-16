@@ -102,16 +102,16 @@ export default {
       };
       const newChat = await new Chats(chatObj).save();
 
-      const createdChatObj = {
-        _id: newChat._id,
-        name,
-        admins: [myObj._id],
-        private: false,
-      };
+      // const createdChatObj = {
+      //   _id: newChat._id,
+      //   name,
+      //   admins: [myObj._id],
+      //   private: false,
+      // };
       const userUpdatePromises = allParticipants.map((userID) =>
         Users.findByIdAndUpdate(
           userID,
-          { $push: { chats: createdChatObj } },
+          { $push: { chats: newChat._id } },
           { new: true }
         )
       );
@@ -258,8 +258,8 @@ export default {
       await findUser.save();
 
       return res.status(200).json({
-        error: false,
-      });
+        error: false, 
+      }); 
     } catch (error) {
       console.log("Error in sendRequest function:", error);
       return res.status(500).json({
@@ -360,14 +360,9 @@ export default {
       };
 
       const newPrivateChat = await new Chats(privateChatObj).save();
-      const privateChatObj2 = {
-        _id: newPrivateChat._id,
-        name: findCurrUser.name + "," + findUser.name,
-        admins: [findCurrUser._id, findUser._id],
-        private: true,
-      };
-      findCurrUser.chats.push(privateChatObj2);
-      findUser.chats.push(privateChatObj2);
+
+      findCurrUser.chats.push(newPrivateChat._id);
+      findUser.chats.push(newPrivateChat._id);
 
       findUser.friends.push(myObj);
       findCurrUser.friends.push(friendsObj);
@@ -388,9 +383,11 @@ export default {
       });
     }
   },
+
   getChat: async (req, res) => {
     try {
       const { chatID } = req.query;
+      
       const currentChat = await Chats.findById(chatID).select(
         "name participants admins private"
       );

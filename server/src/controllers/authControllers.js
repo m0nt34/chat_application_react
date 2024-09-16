@@ -335,7 +335,12 @@ export default {
           }
         }
       );
-      const user = await Users.findById(decoded.userID);
+      const user = await Users.findById(decoded.userID).populate({
+        path:"chats",
+        select:"name private admins"
+      });
+
+
       if (!user) {
         return res
           .status(401)

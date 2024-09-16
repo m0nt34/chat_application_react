@@ -3,15 +3,16 @@ import { useUser } from "../../store/userStore";
 import { postMessage, getMessages } from "../../services/chatServices";
 import { useRoom } from "../../store/currentRomm";
 import Emojis from "./Emojis";
+import { useEmojis } from "../../store/emojisContainer";
 
 const ChatBody = ({ socket }) => {
   const [messageList, setMessageList] = useState([]);
   const [curMessage, setCurMessage] = useState("");
   const { user } = useUser();
   const { room } = useRoom();
+  const { setEmojisToFalse } = useEmojis();
   const messagesEndRef = useRef(null);
-
-  
+  const inputFieldRef = useRef(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const messageObj = {
@@ -22,18 +23,16 @@ const ChatBody = ({ socket }) => {
     if (curMessage.trim() !== "") {
       await socket.emit("send_message", messageObj, (res) => {});
       setMessageList((prev) => [...prev, messageObj]);
-
       setCurMessage("");
-
+      setEmojisToFalse();
+      inputFieldRef.focus;
       await postMessage(messageObj);
     }
   };
-
   useEffect(() => {
     const handleMessageReceive = (data) => {
       setMessageList((list) => [...list, data]);
     };
-
     socket.on("receive_message", handleMessageReceive);
     return () => {
       socket.off("receive_message", handleMessageReceive);
@@ -101,6 +100,7 @@ const ChatBody = ({ socket }) => {
           <div className="relative flex items-center bg-gray-700 w-full px-5 py-2 rounded-lg focus-within:border-customColor-blue border-2 border-[#323644]">
             <input
               autoComplete="off"
+              ref={inputFieldRef}
               className="peer flex-1 bg-transparent text-white outline-none w-full placeholder-transparent text-2xl"
               onChange={(e) => {
                 setCurMessage(e.target.value);
