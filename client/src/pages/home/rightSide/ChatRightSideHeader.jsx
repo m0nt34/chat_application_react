@@ -1,9 +1,9 @@
 import React from "react";
-import { useRoom } from "../../store/currentRomm";
-import { useUser } from "../../store/userStore";
-import Gear from "../../assets/icons/Gear";
-import { useChatSettingsPopup } from "../../store/chatSettingsPopup";
-import AvatarImg from "./AvatarImg";
+import { useRoom } from "../../../store/currentRomm";
+import { useUser } from "../../../store/userStore";
+import Gear from "../../../assets/icons/Gear";
+import { useChatSettingsPopup } from "../../../store/chatSettingsPopup";
+import AvatarImg from "../AvatarImg";
 const ChatRightSideHeader = () => {
   const { room } = useRoom();
   const { user } = useUser();

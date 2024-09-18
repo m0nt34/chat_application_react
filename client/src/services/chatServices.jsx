@@ -110,4 +110,18 @@ export const getChatByID = async (roomID) => {
       message: error.response?.data?.message || "Failed get chat.",
     };
   }
-}; 
+};
+export const updateChat = async (ID, newChat) => {
+  try {
+    const res = await axios.patch(`http://localhost:3001/update-chat`, {
+      ID,
+      newChat,
+    });
+    return res.data;
+  } catch (error) {
+    return {
+      error: true,
+      message: error.response?.data?.message || "Failed get chat.",
+    };
+  }
+};

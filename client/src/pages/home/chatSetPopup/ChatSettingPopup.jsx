@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useChatSettingsPopup } from "../../store/chatSettingsPopup";
-import { useRoom } from "../../store/currentRomm";
-import { getChatByID } from "../../services/chatServices";
-import AvatarImg from "./AvatarImg";
-import Input from "../../components/UI/Input";
-import SearchIcon from "../../assets/icons/SearchIcon";
-import { useUser } from "../../store/userStore";
-import { filterValidation } from "../../utils/validation";
+import React, { useEffect, useRef, useState } from "react";
+import { useChatSettingsPopup } from "../../../store/chatSettingsPopup";
+import { useRoom } from "../../../store/currentRomm";
+import AvatarImg from "../AvatarImg";
+import { handleUpdate } from "../../../utils/handleUpdate";
+import UserList from "./UserList";
+import { getChatByID } from "../../../services/chatServices";
 const ChatSettingPopup = () => {
   const { isOpen, setPopupToFalse } = useChatSettingsPopup();
   const { room } = useRoom();
-  const { user } = useUser();
-  const [roomPrts, setRoomPrts] = useState([]);
+  const originalName = useRef("");
   const [currentRoom, setCurrentRoom] = useState({
     _id: null,
     name: "",
@@ -19,18 +16,7 @@ const ChatSettingPopup = () => {
     admins: [],
     private: true,
   });
-  const handleSearch = (e) => {
-    const searchWord = e.target.value;
-    if (searchWord.trim() === "") {
-      setRoomPrts(currentRoom.participants);
-    } else {
-      setRoomPrts((prev) => {
-        return currentRoom.participants.filter((prt) =>
-          filterValidation(prt, searchWord)
-        );
-      });
-    }
-  };
+
   const handleTextName = (e) => {
     setCurrentRoom((prev) => ({
       ...prev,
@@ -42,18 +28,19 @@ const ChatSettingPopup = () => {
       ...prev,
       name: room.name,
     }));
+    originalName.current = room.name;
     const getChatFunc = async () => {
-
       if (!room._id) return;
-
       const res = await getChatByID(room._id);
       if (!res.error) {
         setCurrentRoom(res.data);
-        setRoomPrts(res.data.participants);
       }
     };
     getChatFunc();
   }, [room]);
+  const hu = () => {
+    handleUpdate(room._id,originalName.current, currentRoom);
+  };
   return (
     isOpen && (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-55 ">
@@ -75,38 +62,8 @@ const ChatSettingPopup = () => {
               enter new group name...
             </span>
           </div>
-          <div className="my-5">
-            <p className="text-white text-lg select-none my-1 ml-1">Members</p>
-            <Input
-              name="searchWord"
-              type="text"
-              placeholder="search..."
-              Icon={SearchIcon}
-              onChange={handleSearch}
-            />
-          </div>
-          <div className="flex flex-col max-h-[400px] overflow-auto h-fit gap-5 users-box">
-            {roomPrts.map((prt) => {
-              return (
-                <div key={prt.email} className="flex items-center">
-                  <div className="flex gap-4 items-center">
-                    <AvatarImg prv={true} className="h-11" />
-                    <div className="flex flex-col">
-                      <span className="flex text-white text-[19px] h-full items-start ">
-                        {prt.name}&nbsp;{prt.lastName}{" "}
-                        {prt._id === user._id && (
-                          <div className="flex text-sm ml-2 p-2 py-1 rounded-md bg-[#3c404b]">
-                            You
-                          </div>
-                        )}
-                      </span>
-                      <span className="text-[#ccc]">{prt.email}</span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <UserList currentRoom={currentRoom} />
+
           <div className="flex w-full gap-4 mt-6">
             <button
               type="button"
@@ -116,10 +73,11 @@ const ChatSettingPopup = () => {
               Cancel
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={() => hu()}
               className="bg-customColor-blue hover:opacity-85 transition text-white px-4 py-2 text-lg rounded-md w-full"
             >
-              Create
+              Update
             </button>
           </div>
         </div>

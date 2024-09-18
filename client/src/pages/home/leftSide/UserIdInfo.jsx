@@ -19,18 +19,20 @@ const UserIdInfo = () => {
         <ThreeDots />
       </button>
       {show && (
-        <div className="flex flex-col bg-[#3e4f69] right-[-50px] z-30 items-start absolute text-white text-[18px] px-4 py-2 rounded-md font-semibold">
-          <p className="select-none">user&nbsp;code:</p>
-          <div className=" flex">
-            <p className="select-none">#&nbsp;</p>
+        <div className="flex flex-col bg-[#2f3544] right-0 z-30 items-start absolute text-white text-[18px] px-4 py-2 rounded-md font-semibold">
+          <div className="border-b border-[#4c5774] pb-2 w-full items-center justify-center">
+
+          <div className="flex w-full items-center justify-center">
+          
             {user.code}
+          </div>
           </div>
           <button
             onClick={() => {
               authToF();
               logOut();
             }}
-            className="w-full select-none mt-2 rounded-md p-1 transition hover:bg-slate-500"
+            className="w-full whitespace-nowrap select-none mt-2 rounded-md p-1 transition hover:bg-[#3e475f]"
           >
             log out
           </button>

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import WinkFaceIcon from "../../assets/icons/WinkFaceIcon";
-import { emojs } from "../../data/emojisData";
-import { useEmojis } from "../../store/emojisContainer";
+import React from "react";
+import WinkFaceIcon from "../../../assets/icons/WinkFaceIcon";
+import { emojs } from "../../../data/emojisData";
+import { useEmojis } from "../../../store/emojisContainer";
 const Emojis = ({ setCurMessage, curMessage }) => {
-  const {isOpen,setEmojisToOp} = useEmojis()
+  const { isOpen, setEmojisToOp } = useEmojis();
   const setEmoji = (emj) => {
     setCurMessage(curMessage + emj);
   };

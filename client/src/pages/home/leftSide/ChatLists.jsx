@@ -3,7 +3,8 @@ import { useUser } from "../../../store/userStore";
 import { useRoom } from "../../../store/currentRomm";
 import { useChatSearch } from "../../../store/chatSearch";
 import AvatarImg from "../AvatarImg";
-const ChatLists = ({ socket }) => {
+import socket from "../../../services/socket";
+const ChatLists = () => {
   const [chats, setChats] = useState([]);
   const { chatSearch } = useChatSearch();
   const { user } = useUser();

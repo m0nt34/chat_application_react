@@ -25,9 +25,9 @@ export default {
         sender: message.sender,
         content: message.content,
         time:
-          new Date(Date.now()).getHours() +
+          String(new Date(Date.now()).getHours()).padStart(2, "0") +
           ":" +
-          new Date(Date.now()).getMinutes(),
+          String(new Date(Date.now()).getMinutes()).padStart(2, "0"),
       };
 
       chatDoc.messages.push(messageObj);
@@ -258,8 +258,8 @@ export default {
       await findUser.save();
 
       return res.status(200).json({
-        error: false, 
-      }); 
+        error: false,
+      });
     } catch (error) {
       console.log("Error in sendRequest function:", error);
       return res.status(500).json({
@@ -387,7 +387,7 @@ export default {
   getChat: async (req, res) => {
     try {
       const { chatID } = req.query;
-      
+
       const currentChat = await Chats.findById(chatID).select(
         "name participants admins private"
       );
@@ -406,6 +406,43 @@ export default {
       return res.status(200).json({
         error: false,
         data: neededFields,
+      });
+    } catch (error) {
+      console.log("Error in sendRequest function:", error);
+      return res.status(500).json({
+        error: true,
+        message: "Internal server error",
+        details: error.message,
+      });
+    }
+  },
+  updateChat: async (req, res) => {
+    try {
+      const { ID, newChat } = req.body;
+
+      if (!newChat) {
+        return res.status(400).json({
+          error: true,
+          message: "updated chat is not provided",
+        });
+      }
+      const currentChat = await Chats.findById(ID);
+      if (!currentChat) {
+        return res.status(404).json({
+          error: true,
+          message: "chat not found",
+        });
+      }
+      const updatedChat = await Chats.findByIdAndUpdate(
+        ID,
+        { $set: newChat },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        error: false,
+        message: "Chat has been updated successfully",
+        data: updatedChat,
       });
     } catch (error) {
       console.log("Error in sendRequest function:", error);

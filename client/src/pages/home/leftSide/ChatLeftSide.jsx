@@ -3,12 +3,12 @@ import LeftSideHeader from "./LeftSideHeader";
 import ChatLists from "./ChatLists";
 import "../../../assets/styles/style.css";
 
-const ChatLeftSide = ({ socket }) => {
+const ChatLeftSide = () => {
   return (
     <div className="flex flex-col gap-5 h-full w-1/3 bg-[#1d212b] p-5">
       <LeftSideHeader />
       <div className="users-box">
-        <ChatLists socket={socket} />
+        <ChatLists />
       </div>
     </div>
   );

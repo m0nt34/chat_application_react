@@ -13,6 +13,7 @@ router.post("/accept-request", authenticate, chatControllers.acceptRequests);
 router.get("/search-users", authenticate, chatControllers.searchUsers);
 router.get("/get-messages", authenticate, chatControllers.getMessages);
 router.get("/get-chat", authenticate, chatControllers.getChat);
+router.patch("/update-chat", authenticate, chatControllers.updateChat);
 
 export default router;
  
