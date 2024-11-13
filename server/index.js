@@ -18,16 +18,19 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://chat-app-react-express.netlify.app",
+      process.env.HOST_SERVER_URL,
+    ],
     credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-
   socket.on("user_connected", (userId, callback) => {
     socket.userId = userId;
-    if (callback) callback('User connected successfully');
+    if (callback) callback("User connected successfully");
   });
 
   socket.on("join_room", (roomId, callback) => {
@@ -40,16 +43,14 @@ io.on("connection", (socket) => {
     if (callback) callback(`Left room ${roomId}`);
   });
 
-  socket.on("send_message", (data,callback) => {
+  socket.on("send_message", (data, callback) => {
     socket.to(data.room).emit("receive_message", data);
-    if(callback)callback(data)
+    if (callback) callback(data);
   });
 
-  socket.on("disconnect", () => {
-    
-  });
+  socket.on("disconnect", () => {});
 });
- 
+
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {

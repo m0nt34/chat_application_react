@@ -2,9 +2,12 @@ import axios from "axios";
 
 export const postMessage = async (message) => {
   try {
-    const res = await axios.post("http://localhost:3001/post-message", {
-      message,
-    });
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/post-message`,
+      {
+        message,
+      }
+    );
     return res.data;
   } catch (error) {
     return {
@@ -16,7 +19,7 @@ export const postMessage = async (message) => {
 export const getMessages = async (id) => {
   try {
     const res = await axios.get(
-      `http://localhost:3001/get-messages?chatId=${id}`
+      `${import.meta.env.VITE_BACKEND_URL}/get-messages?chatId=${id}`
     );
     return res.data;
   } catch (error) {
@@ -29,11 +32,14 @@ export const getMessages = async (id) => {
 
 export const createChat = async (name, userIDs, myObj) => {
   try {
-    const res = await axios.post("http://localhost:3001/create-chat", {
-      name,
-      userIDs,
-      myObj,
-    });
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/create-chat`,
+      {
+        name,
+        userIDs,
+        myObj,
+      }
+    );
     return res.data;
   } catch (error) {
     return {
@@ -45,7 +51,9 @@ export const createChat = async (name, userIDs, myObj) => {
 export const searchUsers = async (searchWord, currUser) => {
   try {
     const res = await axios.get(
-      `http://localhost:3001/search-users?searchCode=${searchWord}&currUser=${currUser}`
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/search-users?searchCode=${searchWord}&currUser=${currUser}`
     );
     return res.data;
   } catch (error) {
@@ -57,10 +65,13 @@ export const searchUsers = async (searchWord, currUser) => {
 };
 export const sendRequest = async (myID, user) => {
   try {
-    const res = await axios.post(`http://localhost:3001/send-request`, {
-      myID,
-      user,
-    });
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/send-request`,
+      {
+        myID,
+        user,
+      }
+    );
     return res.data;
   } catch (error) {
     return {
@@ -72,10 +83,13 @@ export const sendRequest = async (myID, user) => {
 };
 export const declineRequest = async (myID, userID) => {
   try {
-    const res = await axios.post(`http://localhost:3001/decline-request`, {
-      myID,
-      userID,
-    });
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/decline-request`,
+      {
+        myID,
+        userID,
+      }
+    );
     return res.data;
   } catch (error) {
     return {
@@ -86,10 +100,13 @@ export const declineRequest = async (myID, userID) => {
 };
 export const acceptRequest = async (myID, userID) => {
   try {
-    const res = await axios.post(`http://localhost:3001/accept-request`, {
-      myID,
-      userID,
-    });
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/accept-request`,
+      {
+        myID,
+        userID,
+      }
+    );
     return res.data;
   } catch (error) {
     return {
@@ -101,7 +118,7 @@ export const acceptRequest = async (myID, userID) => {
 export const getChatByID = async (roomID) => {
   try {
     const res = await axios.get(
-      `http://localhost:3001/get-chat?chatID=${roomID}`
+      `${import.meta.env.VITE_BACKEND_URL}/get-chat?chatID=${roomID}`
     );
     return res.data;
   } catch (error) {
@@ -113,10 +130,13 @@ export const getChatByID = async (roomID) => {
 };
 export const updateChat = async (ID, newChat) => {
   try {
-    const res = await axios.patch(`http://localhost:3001/update-chat`, {
-      ID,
-      newChat,
-    });
+    const res = await axios.patch(
+      `${import.meta.env.VITE_BACKEND_URL}/update-chat`,
+      {
+        ID,
+        newChat,
+      }
+    );
     return res.data;
   } catch (error) {
     return {
