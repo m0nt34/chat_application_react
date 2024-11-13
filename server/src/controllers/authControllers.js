@@ -336,10 +336,9 @@ export default {
         }
       );
       const user = await Users.findById(decoded.userID).populate({
-        path:"chats",
-        select:"name private admins"
+        path: "chats",
+        select: "name private admins",
       });
-
 
       if (!user) {
         return res
@@ -357,8 +356,16 @@ export default {
     }
   },
   logout: async (req, res) => {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
 
     return res.status(200).json({ message: "Logout successful" });
   },
