@@ -2,16 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import http from "http";
-import configs from "./src/configs/config.js";
+import configureApp from "./src/configs/config.js";
 import routes from "./src/routes/route.js";
-import cors from "cors";
 import { Server } from "socket.io";
 
 dotenv.config();
 
 const app = express();
 
-app.use(configs);
+configureApp(app);
 app.use("/", routes);
 
 const server = http.createServer(app);
