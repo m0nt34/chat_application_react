@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import EmailIcon from "../../assets/icons/formIcons/EmailIcon";
 import PasswordInput from "../../components/UI/PasswordInput";
 import { passwordsValidation } from "../../utils/formValidations";
-import { resetPassword } from "../../services/authServices";
+import { resetPassword } from "../../services/AuthServices";
 import { showErrorMessage, showSuccessMessage } from "../../utils/validation";
 import { useNavigate } from "react-router-dom";
 const PasswordsForm = ({ userID }) => {

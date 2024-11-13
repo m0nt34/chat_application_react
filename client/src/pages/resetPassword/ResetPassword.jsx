@@ -1,16 +1,16 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "../../assets/images/mountains.jpg";
 import LineSvg from "../../assets/SVG/LineSvg";
 import PasswordsForm from "./PasswordsForm";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkTokenLink } from "../../services/authServices";
+import { checkTokenLink } from "../../services/AuthServices";
 import { showErrorMessage } from "../../utils/validation";
 const ResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const errorShownRef = useRef(false);
-  const userID = useRef(null)
+  const userID = useRef(null);
 
   const sendNewPassword = async (token) => {
     const res = await checkTokenLink(token);
@@ -20,7 +20,7 @@ const ResetPassword = () => {
       errorShownRef.current = true;
       navigate("/sign-in");
     } else {
-      userID.current = res.data
+      userID.current = res.data;
       setLoading(false);
     }
   };
@@ -64,7 +64,7 @@ const ResetPassword = () => {
                   Try not to forget your password! Choose something that is
                   easier to remember.
                 </p>
-                <PasswordsForm userID={userID.current}/>
+                <PasswordsForm userID={userID.current} />
               </div>
             </div>
             <LineSvg

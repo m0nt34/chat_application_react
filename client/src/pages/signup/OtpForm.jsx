@@ -4,7 +4,7 @@ import {
   signUpService,
   checkOtpCode,
   sendOtpEmail,
-} from "../../services/authServices";
+} from "../../services/AuthServices";
 import { OTPValidation } from "../../utils/formValidations";
 import { toast } from "react-toastify";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";

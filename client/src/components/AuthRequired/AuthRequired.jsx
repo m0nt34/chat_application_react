@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../store/authStore";
 
-import { checkIfAuthenticated } from "../../services/authServices";
+import { checkIfAuthenticated } from "../../services/AuthServices.jsx";
 export default function AuthRequired() {
   const navigate = useNavigate();
   const location = useLocation();

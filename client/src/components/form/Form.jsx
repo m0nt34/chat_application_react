@@ -11,7 +11,7 @@ import {
   checkIfuserExists,
   sendOtpEmail,
   signInService,
-} from "../../services/authServices";
+} from "../../services/AuthServices";
 import { showErrorMessage } from "../../utils/validation";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
 import { useAuth } from "../../store/authStore";

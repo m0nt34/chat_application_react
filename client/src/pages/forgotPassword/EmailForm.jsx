@@ -4,7 +4,7 @@ import Input from "../../components/UI/Input";
 import { useNavigate } from "react-router-dom";
 import { emailValidation } from "../../utils/formValidations";
 import ThreeDotsLoadingIcon from "../../assets/icons/Loaders/ThreeDotsLoadingIcon";
-import { sendPasswordResetLink } from "../../services/authServices";
+import { sendPasswordResetLink } from "../../services/AuthServices";
 import { showErrorMessage, showSuccessMessage } from "../../utils/validation";
 const EmailForm = () => {
   const navigate = useNavigate();

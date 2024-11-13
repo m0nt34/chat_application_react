@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getUserData } from "../services/authServices";
+import { getUserData } from "../services/AuthServices";
 export const useUser = create((set) => ({
   user: {
     _id: null,
